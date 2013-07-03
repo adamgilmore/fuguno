@@ -32,7 +32,8 @@ namespace Fuguno.Tfs
                     StartTime = buildDetail.StartTime,
                     LastChangeTime = buildDetail.LastChangedOn,
                     FinishTime = buildDetail.FinishTime,
-                    RequestedBy = buildDetail.RequestedBy
+                    RequestedBy = buildDetail.RequestedBy,
+                    RequestedFor = buildDetail.RequestedFor
                 };
             }
             

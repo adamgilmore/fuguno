@@ -19,13 +19,14 @@
                     ConfigurationManager.AppSettings["TfsProjectName"],
                     ConfigurationManager.AppSettings["TfsBuildDefinitionName"]);
 
-                Console.WriteLine("BuildNumber={0} Status={1} RequestedBy={2} StartTime={3} LastChangeTime={4} FinishTime={5}",
-                    buildInfo.BuildNumber,
+                Console.WriteLine("S={0} RF={1} RB={2} ST={3} CT={4} FT={5} #={6}",
                     buildInfo.Status,
+                    buildInfo.RequestedFor,
                     buildInfo.RequestedBy,
                     buildInfo.StartTime,
                     buildInfo.LastChangeTime,
-                    buildInfo.FinishTime);
+                    buildInfo.FinishTime,
+                    buildInfo.BuildNumber);
 
                 Thread.Sleep(5000);
             }

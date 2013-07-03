@@ -14,5 +14,6 @@ namespace Fuguno.Tfs
         public DateTime FinishTime { get; set; }
         public DateTime LastChangeTime { get; set; }
         public string RequestedBy { get; set; }
+        public string RequestedFor { get; set; }
     }
 }
