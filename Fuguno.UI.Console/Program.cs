@@ -4,26 +4,50 @@
     using System.Configuration;
     using System.Threading;
     using System;
+    using System.Collections.Generic;
 
     class Program
     {
         static void Main(string[] args)
         {
-            var service = new BuildInfoService();
+            var service = new BuildInfoService(
+                ConfigurationManager.AppSettings["TfsServerUri"],
+                ConfigurationManager.AppSettings["TfsCollectionName"],
+                ConfigurationManager.AppSettings["TfsProjectName"]);
 
             while (true)
             {
-                var buildInfo = service.GetLatestBuildInfo(
-                    ConfigurationManager.AppSettings["TfsServerUri"],
-                    ConfigurationManager.AppSettings["TfsCollectionName"],
-                    ConfigurationManager.AppSettings["TfsProjectName"],
-                    ConfigurationManager.AppSettings["TfsBuildDefinitionName"]);
-
-                TimeSpan elapsed = buildInfo.StartTime == null ? new TimeSpan(0) : buildInfo.LastChangeTime - buildInfo.StartTime;
-                Console.WriteLine("{0} {1} {2} {3} {4}mins", buildInfo.BuildNumber, buildInfo.Status, buildInfo.RequestedFor, buildInfo.StartTime, elapsed.Minutes);
+                var buildInfo = service.GetLatestBuildInfo(ConfigurationManager.AppSettings["TfsBuildDefinitionName"]);
+                Console.WriteLine("{0} {1} {2} {3} {4}mins {5}",
+                    buildInfo.BuildNumber, 
+                    buildInfo.Status, 
+                    buildInfo.RequestedFor,
+                    buildInfo.StartTime, 
+                    buildInfo.ElapsedTime.Minutes, 
+                    FormatTestPassRate(buildInfo.TestRunInfos));
 
                 Thread.Sleep(5000);
             }
+        }
+
+        private static string  FormatTestPassRate(List<TestRunInfo> testRunInfos)
+        {
+            string testPassRate = "No tests";
+
+            if (testRunInfos != null && testRunInfos.Count > 0)
+            {
+                int testPassCount = 0;
+                int testTotalCount = 0;
+                foreach (var testRunInfo in testRunInfos)
+                {
+                    testPassCount += testRunInfo.Passed;
+                    testTotalCount += testRunInfo.Total;
+                }
+
+                testPassRate = string.Format("{0:P0}", (decimal)testPassCount / (decimal)testTotalCount);
+            }
+
+            return testPassRate;
         }
     }
 }
