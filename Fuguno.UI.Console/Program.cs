@@ -19,14 +19,8 @@
                     ConfigurationManager.AppSettings["TfsProjectName"],
                     ConfigurationManager.AppSettings["TfsBuildDefinitionName"]);
 
-                Console.WriteLine("S={0} RF={1} RB={2} ST={3} CT={4} FT={5} #={6}",
-                    buildInfo.Status,
-                    buildInfo.RequestedFor,
-                    buildInfo.RequestedBy,
-                    buildInfo.StartTime,
-                    buildInfo.LastChangeTime,
-                    buildInfo.FinishTime,
-                    buildInfo.BuildNumber);
+                TimeSpan elapsed = buildInfo.StartTime == null ? new TimeSpan(0) : buildInfo.LastChangeTime - buildInfo.StartTime;
+                Console.WriteLine("{0} {1} {2} {3} {4}mins", buildInfo.BuildNumber, buildInfo.Status, buildInfo.RequestedFor, buildInfo.StartTime, elapsed.Minutes);
 
                 Thread.Sleep(5000);
             }
