@@ -3,12 +3,12 @@
     using Fuguno.Tfs;
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Configuration;
     using System.Diagnostics;
     using System.Threading;
     using System.Windows;
-    using System.Windows.Media;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -19,6 +19,8 @@
         List<string> _buildDefinitionNames = new List<string>();
         long _refreshInteralMilliseconds;
         BackgroundWorker _worker;
+
+        ObservableCollection<BuildInfo> _buildInfos = new ObservableCollection<BuildInfo>();
 
         public MainWindow()
         {
@@ -52,45 +54,15 @@
 
                 var buildInfos = _buildInfoService.GetLatestBuildInfos(_buildDefinitionNames);
 
-                BuildInfo buildInfo = null;
-                foreach (var bi in buildInfos)
+                BuildInfosListBox.Dispatcher.Invoke(new Action(delegate()
                 {
-                    buildInfo = bi;
-                }
-
-                BuildInfoWidget.Dispatcher.Invoke(new Action(delegate()
-                {
-                    Brush backgroundBrush = null;
-                    switch (buildInfo.Status)
+                    _buildInfos.Clear();
+                    foreach (var buildInfo in buildInfos)
                     {
-                        case "None":
-                        case "NotStarted":
-                            backgroundBrush = new SolidColorBrush(Colors.DarkGray);
-                            break;
-                        case "InProgress":
-                            backgroundBrush = new SolidColorBrush(Colors.LightGray);
-                            break;
-                        case "Succeeded":
-                            backgroundBrush = new SolidColorBrush(Colors.Green);
-                            break;
-                        case "PartiallySucceeded":
-                            backgroundBrush = new SolidColorBrush(Colors.Orange);
-                            break;
-                        case "Failed":
-                            backgroundBrush = new SolidColorBrush(Colors.Red);
-                            break;
-                        case "Stopped":
-                            backgroundBrush = new SolidColorBrush(Colors.Yellow);
-                            break;
+                        _buildInfos.Add(buildInfo);
                     }
 
-                    BuildInfoWidget.Text = string.Format("{0} {1} {2} {3}mins",
-                    buildInfo.BuildNumber,
-                    buildInfo.Status,
-                    buildInfo.RequestedFor,
-                    buildInfo.ElapsedTime.Minutes);
-
-                    BuildInfoWidget.Background = backgroundBrush;
+                    BuildInfosListBox.ItemsSource = _buildInfos;
                 }));
 
                 stopwatch.Stop();

@@ -1,8 +1,17 @@
-﻿<Window x:Class="Fuguno.UI.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Fuguno.UI" x:Class="Fuguno.UI.MainWindow"
         Title="MainWindow" Height="350" Width="525">
     <StackPanel>
-        <TextBlock Name="BuildInfoWidget" Text="" HorizontalAlignment="Left" Margin="5,5,0,5" FontSize="18" Height="50" VerticalAlignment="Center" Width="502"/>
+        <ListBox x:Name="BuildInfosListBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <local:BuildInfoWidget />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </StackPanel>
 </Window>
