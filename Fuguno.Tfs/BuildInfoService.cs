@@ -4,6 +4,7 @@
     using Microsoft.TeamFoundation.TestManagement.Client;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
 
     public class BuildInfoService : IBuildInfoService
     {
@@ -21,11 +22,30 @@
             _testManagementService = _tfsCollection.TestManagementService;
         }
 
+        public IEnumerable<BuildInfo> GetLatestBuildInfos(IEnumerable<string> buildDefinitionNames)
+        {
+            Trace.TraceInformation(string.Format("{0} -> GetLatestBuildInfos", DateTime.Now));
+
+            List<BuildInfo> buildInfos = new List<BuildInfo>();
+
+            foreach (var buildDefinitionName in buildDefinitionNames)
+            {
+                buildInfos.Add(GetLatestBuildInfo(buildDefinitionName));
+            }
+
+            Trace.TraceInformation(string.Format("{0} <- GetLatestBuildInfos", DateTime.Now));
+
+            return buildInfos;
+        }
+
         public BuildInfo GetLatestBuildInfo(string buildDefinitionName)
         {
+            Trace.TraceInformation(string.Format("{0} -> GetLatestBuildInfo buildDefinitionName={1}", DateTime.Now, buildDefinitionName));
+
             BuildInfo buildInfo = null;
 
             var buildDefinitionSpec = _buildServer.CreateBuildDetailSpec(_tfsProjectName, buildDefinitionName);
+            buildDefinitionSpec.InformationTypes = null;
             buildDefinitionSpec.MaxBuildsPerDefinition = 1;
             buildDefinitionSpec.QueryOrder = BuildQueryOrder.FinishTimeDescending;
 
@@ -35,8 +55,7 @@
                 throw new ApplicationException(string.Format("Build Definition '{0}' not found", buildDefinitionName));
             }
 
-            var buildDetail = buildDetails.Builds[0];
-
+            var buildDetail = buildDetails.Builds[0]; // we only requested 1 so take the first
             if (buildDetail != null)
             {
                 buildInfo = new BuildInfo()
@@ -52,6 +71,8 @@
 
                 buildInfo.TestRunInfos = GetTestRunInfos(buildDetail.Uri);
             }
+
+            Trace.TraceInformation(string.Format("{0} <- GetLatestBuildInfo buildDefinitionName={1}", DateTime.Now, buildDefinitionName));
             
             return buildInfo;
         }
@@ -75,6 +96,6 @@
             }
 
             return testRunInfos;
-        }
+        } 
     }
 }

@@ -2,14 +2,13 @@
 {
     using Fuguno.Tfs;
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Configuration;
     using System.Diagnostics;
     using System.Threading;
-    using System.Timers;
     using System.Windows;
     using System.Windows.Media;
-    using System.Windows.Threading;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -17,7 +16,7 @@
     public partial class MainWindow : Window
     {
         IBuildInfoService _buildInfoService;
-        string _buildDefinitionName;
+        List<string> _buildDefinitionNames = new List<string>();
         long _refreshInteralMilliseconds;
         BackgroundWorker _worker;
 
@@ -30,7 +29,11 @@
                 ConfigurationManager.AppSettings["TfsCollectionName"],
                 ConfigurationManager.AppSettings["TfsProjectName"]);
 
-            _buildDefinitionName = ConfigurationManager.AppSettings["TfsBuildDefinitionName"];
+            var names = ConfigurationManager.AppSettings["TfsBuildDefinitionNames"].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var name in names)
+            {
+                _buildDefinitionNames.Add(name.Trim());
+            }
 
             _refreshInteralMilliseconds = Convert.ToInt32(ConfigurationManager.AppSettings["RefreshIntervalSeconds"]) * 1000;
 
@@ -47,9 +50,13 @@
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                Debug.WriteLine("{0} Enter", DateTime.Now);
+                var buildInfos = _buildInfoService.GetLatestBuildInfos(_buildDefinitionNames);
 
-                var buildInfo = _buildInfoService.GetLatestBuildInfo(_buildDefinitionName);
+                BuildInfo buildInfo = null;
+                foreach (var bi in buildInfos)
+                {
+                    buildInfo = bi;
+                }
 
                 BuildInfoWidget.Dispatcher.Invoke(new Action(delegate()
                 {
