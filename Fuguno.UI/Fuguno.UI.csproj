@@ -69,6 +69,7 @@
     <Compile Include="BuildInfoWidget.xaml.cs">
       <DependentUpon>BuildInfoWidget.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BuildInfoWidgetColourConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

@@ -4,7 +4,7 @@
         xmlns:local="clr-namespace:Fuguno.UI" x:Class="Fuguno.UI.MainWindow"
         Title="MainWindow" Height="350" Width="525">
     <StackPanel>
-        <ListBox x:Name="BuildInfosListBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <ListBox x:Name="BuildInfosListBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>

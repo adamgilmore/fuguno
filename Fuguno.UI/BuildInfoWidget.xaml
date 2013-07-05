@@ -3,8 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" Height="95.279" Width="Auto" Background="#FF5B5959">
-    <Grid x:Name="Grid">
+             xmlns:l="clr-namespace:Fuguno.UI"
+             mc:Ignorable="d" Height="95.279" Width="Auto">
+    <UserControl.Resources>
+        <l:BuildInfoWidgetColourConverter x:Key="statusConverter" />
+    </UserControl.Resources>
+
+    <Grid x:Name="Grid" Background="{Binding Status, Converter={StaticResource statusConverter}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="30" />

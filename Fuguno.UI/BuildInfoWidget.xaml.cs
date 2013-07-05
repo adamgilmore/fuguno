@@ -45,37 +45,5 @@ namespace Fuguno.UI
         {
             InitializeComponent();
         }
-
-        private void UpdateControls()
-        {
-            //Brush backgroundBrush = null;
-            //switch (_buildInfo.Status)
-            //{
-            //    case "None":
-            //    case "NotStarted":
-            //        backgroundBrush = new SolidColorBrush(Colors.DarkGray);
-            //        break;
-            //    case "InProgress":
-            //        backgroundBrush = new SolidColorBrush(Colors.LightGray);
-            //        break;
-            //    case "Succeeded":
-            //        backgroundBrush = new SolidColorBrush(Colors.Green);
-            //        break;
-            //    case "PartiallySucceeded":
-            //        backgroundBrush = new SolidColorBrush(Colors.Orange);
-            //        break;
-            //    case "Failed":
-            //        backgroundBrush = new SolidColorBrush(Colors.Red);
-            //        break;
-            //    case "Stopped":
-            //        backgroundBrush = new SolidColorBrush(Colors.Yellow);
-            //        break;
-            //}
-
-            //Background = backgroundBrush;
-
-            //BuildNumberLabel.Content = _buildInfo.BuildNumber;
-            //RequestedForLabel.Content = _buildInfo.RequestedFor;
-        }
     }
 }
