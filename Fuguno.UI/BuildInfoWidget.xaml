@@ -13,24 +13,34 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <Label Name="BuildNumberLabel"  
+        <TextBlock Name="BuildNumberLabel"  
                Grid.Column="1" 
                Grid.Row="0" 
-               Content="{Binding BuildNumber}" 
+               Text="{Binding BuildNumber}" 
                Height="Auto" 
                Width="Auto" 
                HorizontalAlignment="Left" 
                VerticalAlignment="Top" 
                Foreground="Black"/>
-        <Label Name="RequestedForLabel" 
+        <TextBlock Name="RequestedForLabel" 
                Grid.Column="1" 
                Grid.Row="1" 
-               Content="{Binding RequestedFor}" 
+               Text="{Binding RequestedFor}" 
+               Height="50" 
+               Width="Auto" 
+               HorizontalAlignment="Left"  
+               VerticalAlignment="Top" 
+               Foreground="Black"/>
+        <TextBlock Name="ElapsedTimeLabel" 
+               Grid.Column="1" 
+               Grid.Row="2" 
+               Text="{Binding ElapsedTime.TotalMinutes, StringFormat=N0}" 
                Height="50" 
                Width="Auto" 
                HorizontalAlignment="Left"  

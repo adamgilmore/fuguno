@@ -13,7 +13,6 @@
 
             switch (status)
             {
-                case "None":
                 case "NotStarted":
                     return new SolidColorBrush(Colors.DarkGray);
                 case "InProgress":

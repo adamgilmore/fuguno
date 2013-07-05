@@ -21,24 +21,32 @@ namespace Fuguno.UI
     public partial class BuildInfoWidget : UserControl
     {
         public static DependencyProperty StatusProperty = DependencyProperty.Register("Status", typeof(string), typeof(BuildInfoWidget));
+        public static DependencyProperty BuildNumberProperty = DependencyProperty.Register("BuildNumber", typeof(string), typeof(BuildInfoWidget));
+        public static DependencyProperty RequestedForProperty = DependencyProperty.Register("RequestedFor", typeof(string), typeof(BuildInfoWidget));
+        public static DependencyProperty ElapsedTimeProperty = DependencyProperty.Register("ElapsedTime", typeof(TimeSpan), typeof(BuildInfoWidget));
+
         public string Status
         {
             get { return (string)GetValue(StatusProperty); }
             set { SetValue(StatusProperty, value); }
         }
 
-        public static DependencyProperty BuildNumberProperty = DependencyProperty.Register("BuildNumber", typeof(string), typeof(BuildInfoWidget));
         public string BuildNumber
         {
             get { return (string)GetValue(BuildNumberProperty); }
             set { SetValue(BuildNumberProperty, value); }
         }
 
-        public static DependencyProperty RequestedForProperty = DependencyProperty.Register("RequestedFor", typeof(string), typeof(BuildInfoWidget));
         public string RequestedFor
         {
             get { return (string)GetValue(RequestedForProperty); }
             set { SetValue(RequestedForProperty, value); }
+        }
+
+        public string ElapsedTime
+        {
+            get { return (string)GetValue(ElapsedTimeProperty); }
+            set { SetValue(ElapsedTimeProperty, value); }
         }
 
         public BuildInfoWidget()
