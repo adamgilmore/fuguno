@@ -16,6 +16,7 @@
     public partial class MainWindow : Window
     {
         IBuildInfoService _buildInfoService;
+        IIterationInfoService _iterationInfoService;
         List<string> _buildDefinitionNames = new List<string>();
         long _refreshInteralMilliseconds;
         BackgroundWorker _worker;
@@ -25,6 +26,12 @@
         public MainWindow()
         {
             InitializeComponent();
+
+            _iterationInfoService = new IterationInfoService(
+                ConfigurationManager.AppSettings["TfsServerUri"],
+                ConfigurationManager.AppSettings["TfsCollectionName"],
+                ConfigurationManager.AppSettings["TfsProjectName"],
+                ConfigurationManager.AppSettings["TfsRootIterationPath"]);
 
             _buildInfoService = new BuildInfoService(
                 ConfigurationManager.AppSettings["TfsServerUri"],
@@ -51,6 +58,13 @@
             {
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
+
+                var iterationInfo = _iterationInfoService.GetCurrentIterationInfo();
+
+                IterationInfoTextBlock.Dispatcher.Invoke(new Action(delegate()
+                {
+                    IterationInfoTextBlock.Text = string.Format("{0} {1} days left", iterationInfo.Name, (iterationInfo.EndDate - DateTime.Now.Date).TotalDays);
+                }));
 
                 var buildInfos = _buildInfoService.GetLatestBuildInfos(_buildDefinitionNames);
 

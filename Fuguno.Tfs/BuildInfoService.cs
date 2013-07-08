@@ -8,7 +8,6 @@
 
     public class BuildInfoService : IBuildInfoService
     {
-        private TfsCollection _tfsCollection;
         private string _tfsProjectName;
 
         private IBuildServer _buildServer;
@@ -17,9 +16,9 @@
         public BuildInfoService(string tfsServerUri, string tfsCollectionName, string tfsProjectName)
         {
             _tfsProjectName = tfsProjectName;
-            _tfsCollection = new TfsCollection(tfsServerUri, tfsCollectionName);
-            _buildServer = _tfsCollection.BuildServer;
-            _testManagementService = _tfsCollection.TestManagementService;
+            var tfsCollection = new TfsCollection(tfsServerUri, tfsCollectionName);
+            _buildServer = tfsCollection.BuildServer;
+            _testManagementService = tfsCollection.TestManagementService;
         }
 
         public IEnumerable<BuildInfo> GetLatestBuildInfos(IEnumerable<string> buildDefinitionNames)

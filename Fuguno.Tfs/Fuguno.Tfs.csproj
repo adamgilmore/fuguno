@@ -48,6 +48,9 @@
     <Compile Include="BuildInfo.cs" />
     <Compile Include="BuildInfoService.cs" />
     <Compile Include="IBuildInfoService.cs" />
+    <Compile Include="IIterationInfoService.cs" />
+    <Compile Include="IterationInfo.cs" />
+    <Compile Include="IterationInfoService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestRunInfo.cs" />
     <Compile Include="TfsCollection.cs" />

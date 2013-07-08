@@ -10,14 +10,24 @@
     {
         static void Main(string[] args)
         {
-            var service = new BuildInfoService(
+            var iterationInfoService = new IterationInfoService(
+                ConfigurationManager.AppSettings["TfsServerUri"],
+                ConfigurationManager.AppSettings["TfsCollectionName"],
+                ConfigurationManager.AppSettings["TfsProjectName"],
+                ConfigurationManager.AppSettings["TfsRootIterationPath"]);
+
+            var iterationInfo = iterationInfoService.GetCurrentIterationInfo();
+
+            Console.WriteLine("{0} {1} {2:d} {3:d}", iterationInfo.Name, iterationInfo.Path, iterationInfo.StartDate, iterationInfo.EndDate);
+
+            var buildInfoService = new BuildInfoService(
                 ConfigurationManager.AppSettings["TfsServerUri"],
                 ConfigurationManager.AppSettings["TfsCollectionName"],
                 ConfigurationManager.AppSettings["TfsProjectName"]);
 
             while (true)
             {
-                var buildInfo = service.GetLatestBuildInfo(ConfigurationManager.AppSettings["TfsBuildDefinitionName"]);
+                var buildInfo = buildInfoService.GetLatestBuildInfo(ConfigurationManager.AppSettings["TfsBuildDefinitionName"]);
                 Console.WriteLine("{0} {1} {2} {3} {4}mins {5}",
                     buildInfo.BuildNumber, 
                     buildInfo.Status, 
