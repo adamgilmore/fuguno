@@ -62,9 +62,9 @@
                     Name = buildDefinitionName,
                     BuildNumber = buildDetail.BuildNumber,
                     Status = buildDetail.Status.ToString(),
-                    StartTime = buildDetail.StartTime,
+                    StartTime = buildDetail.StartTime == DateTime.MinValue ? (DateTime?)null : buildDetail.StartTime,
                     LastChangeTime = buildDetail.LastChangedOn,
-                    FinishTime = buildDetail.FinishTime,
+                    FinishTime = buildDetail.FinishTime == DateTime.MinValue ? (DateTime?)null : buildDetail.FinishTime,
                     RequestedBy = buildDetail.RequestedBy,
                     RequestedFor = buildDetail.RequestedFor
                 };

@@ -53,7 +53,6 @@
             set { _finishTime = value; OnPropertyChanged("FinishTime"); }
         }
 
-
         public DateTime? LastChangeTime
         {
             get { return _lastChangedTime; }

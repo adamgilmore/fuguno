@@ -37,7 +37,7 @@
                         buildInfo.Status,
                         buildInfo.RequestedFor,
                         buildInfo.StartTime,
-                        buildInfo.ElapsedTime.Minutes,
+                        buildInfo.ElapsedTime == null ? "-" : buildInfo.ElapsedTime.Value.Minutes.ToString(),
                         string.Format("{0:p}", ((double)buildInfo.TotalTestPassedCount / (double)buildInfo.TotalTestCount)));
                 }
             }
