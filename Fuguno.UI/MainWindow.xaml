@@ -5,6 +5,7 @@
         Title="MainWindow" Height="350" Width="525" Background="Black">
     <StackPanel>
         <TextBlock x:Name="IterationInfoTextBlock" Foreground="White" FontSize="20"/>
+
         <ListBox x:Name="BuildInfosListBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch">
             <ListBox.ItemTemplate>
                 <DataTemplate>

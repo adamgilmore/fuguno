@@ -25,39 +25,22 @@
                 ConfigurationManager.AppSettings["TfsCollectionName"],
                 ConfigurationManager.AppSettings["TfsProjectName"]);
 
+            var buildDefinitonNames = ConfigurationManager.AppSettings["TfsBuildDefinitionNames"].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
             while (true)
             {
-                var buildInfo = buildInfoService.GetLatestBuildInfo(ConfigurationManager.AppSettings["TfsBuildDefinitionName"]);
-                Console.WriteLine("{0} {1} {2} {3} {4}mins {5}",
-                    buildInfo.BuildNumber, 
-                    buildInfo.Status, 
-                    buildInfo.RequestedFor,
-                    buildInfo.StartTime, 
-                    buildInfo.ElapsedTime.Minutes, 
-                    FormatTestPassRate(buildInfo.TestRunInfos));
-
-                Thread.Sleep(5000);
-            }
-        }
-
-        private static string  FormatTestPassRate(List<TestRunInfo> testRunInfos)
-        {
-            string testPassRate = "No tests";
-
-            if (testRunInfos != null && testRunInfos.Count > 0)
-            {
-                int testPassCount = 0;
-                int testTotalCount = 0;
-                foreach (var testRunInfo in testRunInfos)
+                foreach (var buildDefinitionName in buildDefinitonNames)
                 {
-                    testPassCount += testRunInfo.Passed;
-                    testTotalCount += testRunInfo.Total;
+                    var buildInfo = buildInfoService.GetLatestBuildInfo(buildDefinitionName.Trim());
+                    Console.WriteLine("{0} {1} {2} {3} {4}mins {5}",
+                        buildInfo.BuildNumber,
+                        buildInfo.Status,
+                        buildInfo.RequestedFor,
+                        buildInfo.StartTime,
+                        buildInfo.ElapsedTime == null ? "-" : buildInfo.ElapsedTime.Value.Minutes.ToString(),
+                        string.Format("{0:p}", ((double)buildInfo.TotalTestPassedCount / (double)buildInfo.TotalTestCount)));
                 }
-
-                testPassRate = string.Format("{0:P0}", (decimal)testPassCount / (decimal)testTotalCount);
             }
-
-            return testPassRate;
         }
     }
 }

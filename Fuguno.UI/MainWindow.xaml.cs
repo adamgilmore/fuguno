@@ -1,6 +1,8 @@
 ﻿namespace Fuguno.UI
 {
     using Fuguno.Tfs;
+    using Fuguno.UI.Helpers;
+    using Fuguno.UI.ViewModels;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -17,11 +19,10 @@
     {
         IBuildInfoService _buildInfoService;
         IIterationInfoService _iterationInfoService;
-        List<string> _buildDefinitionNames = new List<string>();
         long _refreshInteralMilliseconds;
         BackgroundWorker _worker;
 
-        ObservableCollection<BuildInfo> _buildInfos = new ObservableCollection<BuildInfo>();
+        ObservableCollectionWithItemNotify<BuildInfoViewModel> _buildInfoViewModels = new ObservableCollectionWithItemNotify<BuildInfoViewModel>();
 
         public MainWindow()
         {
@@ -38,11 +39,14 @@
                 ConfigurationManager.AppSettings["TfsCollectionName"],
                 ConfigurationManager.AppSettings["TfsProjectName"]);
 
-            var names = ConfigurationManager.AppSettings["TfsBuildDefinitionNames"].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var name in names)
+            var buildDefinitonNames = ConfigurationManager.AppSettings["TfsBuildDefinitionNames"].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var buildDefinitionName in buildDefinitonNames)
             {
-                _buildDefinitionNames.Add(name.Trim());
+                var viewModel = new BuildInfoViewModel(buildDefinitionName.Trim(), true);
+                _buildInfoViewModels.Add(viewModel);
             }
+
+            BuildInfosListBox.ItemsSource = _buildInfoViewModels;
 
             _refreshInteralMilliseconds = Convert.ToInt32(ConfigurationManager.AppSettings["RefreshIntervalSeconds"]) * 1000;
 
@@ -66,18 +70,23 @@
                     IterationInfoTextBlock.Text = string.Format("{0} {1} days left", iterationInfo.Name, (iterationInfo.EndDate - DateTime.Now.Date).TotalDays);
                 }));
 
-                var buildInfos = _buildInfoService.GetLatestBuildInfos(_buildDefinitionNames);
-
-                BuildInfosListBox.Dispatcher.Invoke(new Action(delegate()
+                foreach (var buildInfoViewModel in _buildInfoViewModels)
                 {
-                    _buildInfos.Clear();
-                    foreach (var buildInfo in buildInfos)
-                    {
-                        _buildInfos.Add(buildInfo);
-                    }
+                    var buildInfo = _buildInfoService.GetLatestBuildInfo(buildInfoViewModel.Name);
 
-                    BuildInfosListBox.ItemsSource = _buildInfos;
-                }));
+                    BuildInfosListBox.Dispatcher.Invoke(new Action(delegate()
+                    {
+                        buildInfoViewModel.BuildNumber = buildInfo.BuildNumber;
+                        buildInfoViewModel.RequestedFor = buildInfo.RequestedFor;
+                        buildInfoViewModel.Status = buildInfo.Status;
+                        buildInfoViewModel.StartTime = buildInfo.StartTime;
+                        buildInfoViewModel.FinishTime = buildInfo.FinishTime;
+                        buildInfoViewModel.LastChangeTime = buildInfo.LastChangeTime;
+                        buildInfoViewModel.TotalTestCount = buildInfo.TotalTestCount;
+                        buildInfoViewModel.TotalTestPassedCount = buildInfo.TotalTestPassedCount;
+                        buildInfoViewModel.IsLoading = false;
+                    }));
+                }
 
                 stopwatch.Stop();
                 if (stopwatch.ElapsedMilliseconds < _refreshInteralMilliseconds)

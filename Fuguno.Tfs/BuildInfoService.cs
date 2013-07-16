@@ -59,16 +59,25 @@
             {
                 buildInfo = new BuildInfo()
                 {
+                    Name = buildDefinitionName,
                     BuildNumber = buildDetail.BuildNumber,
                     Status = buildDetail.Status.ToString(),
-                    StartTime = buildDetail.StartTime,
+                    StartTime = buildDetail.StartTime == DateTime.MinValue ? (DateTime?)null : buildDetail.StartTime,
                     LastChangeTime = buildDetail.LastChangedOn,
-                    FinishTime = buildDetail.FinishTime,
+                    FinishTime = buildDetail.FinishTime == DateTime.MinValue ? (DateTime?)null : buildDetail.FinishTime,
                     RequestedBy = buildDetail.RequestedBy,
                     RequestedFor = buildDetail.RequestedFor
                 };
 
                 buildInfo.TestRunInfos = GetTestRunInfos(buildDetail.Uri);
+
+                long totalTestCount, totalTestPassedCount, totalTestFailedCount, totalTestInconclusiveCount;
+                CalculateTotalTestCounts(buildInfo.TestRunInfos, out totalTestCount, out totalTestPassedCount, out totalTestFailedCount, out totalTestInconclusiveCount);
+
+                buildInfo.TotalTestCount = totalTestCount;
+                buildInfo.TotalTestPassedCount = totalTestPassedCount;
+                buildInfo.TotalTestFailedCount = totalTestFailedCount;
+                buildInfo.TotalTestInconclusiveCount = totalTestInconclusiveCount;
             }
 
             Trace.TraceInformation(string.Format("{0} <- GetLatestBuildInfo buildDefinitionName={1}", DateTime.Now, buildDefinitionName));
@@ -95,6 +104,25 @@
             }
 
             return testRunInfos;
-        } 
+        }
+
+        private static void CalculateTotalTestCounts(List<TestRunInfo> testRunInfos, out long totalTestCount, out long totalPassedCount, out long totalFailedCount, out long totalInconclusiveCount)
+        {
+            totalTestCount = 0;
+            totalPassedCount = 0;
+            totalFailedCount = 0;
+            totalInconclusiveCount = 0;
+
+            if (testRunInfos != null && testRunInfos.Count > 0)
+            {
+                foreach (var testRunInfo in testRunInfos)
+                {
+                    totalTestCount += testRunInfo.Completed;
+                    totalPassedCount += testRunInfo.Passed;
+                    totalFailedCount += testRunInfo.Failed;
+                    totalInconclusiveCount += testRunInfo.Inconclusive;
+                }
+            }
+        }
     }
 }

@@ -23,7 +23,8 @@ namespace Fuguno.UI
         public static DependencyProperty StatusProperty = DependencyProperty.Register("Status", typeof(string), typeof(BuildInfoWidget));
         public static DependencyProperty BuildNumberProperty = DependencyProperty.Register("BuildNumber", typeof(string), typeof(BuildInfoWidget));
         public static DependencyProperty RequestedForProperty = DependencyProperty.Register("RequestedFor", typeof(string), typeof(BuildInfoWidget));
-        public static DependencyProperty ElapsedTimeProperty = DependencyProperty.Register("ElapsedTime", typeof(TimeSpan), typeof(BuildInfoWidget));
+        public static DependencyProperty ElapsedTimeProperty = DependencyProperty.Register("ElapsedTime", typeof(TimeSpan?), typeof(BuildInfoWidget));
+        public static DependencyProperty TestPassRateProperty = DependencyProperty.Register("TestPassRate", typeof(double?), typeof(BuildInfoWidget));
 
         public string Status
         {
@@ -43,10 +44,16 @@ namespace Fuguno.UI
             set { SetValue(RequestedForProperty, value); }
         }
 
-        public string ElapsedTime
+        public TimeSpan? ElapsedTime
         {
-            get { return (string)GetValue(ElapsedTimeProperty); }
+            get { return (TimeSpan?)GetValue(ElapsedTimeProperty); }
             set { SetValue(ElapsedTimeProperty, value); }
+        }
+
+        public double? TestPassRate
+        {
+            get { return (double?)GetValue(TestPassRateProperty); }
+            set { SetValue(TestPassRateProperty, value); }
         }
 
         public BuildInfoWidget()
