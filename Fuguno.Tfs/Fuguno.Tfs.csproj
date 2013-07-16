@@ -55,6 +55,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestRunInfo.cs" />
     <Compile Include="TfsCollection.cs" />
+    <Compile Include="WorkItemStats.cs" />
+    <Compile Include="WorkItemInfo.cs" />
     <Compile Include="WorkItemStatsService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

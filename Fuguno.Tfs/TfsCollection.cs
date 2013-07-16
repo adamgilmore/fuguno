@@ -1,11 +1,12 @@
 ﻿namespace Fuguno.Tfs
 {
     using Microsoft.TeamFoundation.Build.Client;
-    using Microsoft.TeamFoundation.Client;
-    using Microsoft.TeamFoundation.Server;
-    using Microsoft.TeamFoundation.TestManagement.Client;
-    using System;
-    using System.Collections.Generic;
+using Microsoft.TeamFoundation.Client;
+using Microsoft.TeamFoundation.Server;
+using Microsoft.TeamFoundation.TestManagement.Client;
+using Microsoft.TeamFoundation.WorkItemTracking.Client;
+using System;
+using System.Collections.Generic;
 
     internal class TfsCollection
     {
@@ -13,6 +14,7 @@
         private IBuildServer _buildServer;
         private ITestManagementService _testManagementService;
         private ICommonStructureService4 _commonStructureService;
+        private WorkItemStore _workItemStore;
 
         public TfsCollection(string tfsServerUri, string tfsCollectionName)
         {
@@ -33,6 +35,11 @@
         public ICommonStructureService4 CommonStructureService
         {
             get { return GetService<ICommonStructureService4>(ref _commonStructureService); }
+        }
+
+        public WorkItemStore WorkItemStore
+        {
+            get { return GetService<WorkItemStore>(ref _workItemStore); }
         }
 
         private T GetService<T>(ref T prop)

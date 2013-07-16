@@ -10,22 +10,55 @@
     {
         static void Main(string[] args)
         {
-            var iterationInfoService = new IterationInfoService(
-                ConfigurationManager.AppSettings["TfsServerUri"],
-                ConfigurationManager.AppSettings["TfsCollectionName"],
-                ConfigurationManager.AppSettings["TfsProjectName"],
-                ConfigurationManager.AppSettings["TfsRootIterationPath"]);
+            // Read config settings
+            var tfsServerUri = ConfigurationManager.AppSettings["TfsServerUri"];
+            var tfsCollectionName = ConfigurationManager.AppSettings["TfsCollectionName"];
+            var tfsProjectName = ConfigurationManager.AppSettings["TfsProjectName"];
+            var tfsRootIterationPath = ConfigurationManager.AppSettings["TfsRootIterationPath"];
+            var tfsBuildDefinitonNames = ConfigurationManager.AppSettings["TfsBuildDefinitionNames"];
+            var tfsWorkItemStatsWorkItemType = ConfigurationManager.AppSettings["TfsWorkItemStatsWorkItemType"];
+            var tfsWorkItemStatsState = ConfigurationManager.AppSettings["TfsWorkItemStatsState"];
+            var tfsWorkItemStatsAreaPaths = ConfigurationManager.AppSettings["TfsWorkItemStatsAreaPaths"];
 
+            // Get work item stats - active bugs by assigned to 
+            var workItemStatsService = new WorkItemStatsService(tfsServerUri, tfsCollectionName);
+            var areaPaths = tfsWorkItemStatsAreaPaths.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+            Console.WriteLine("Active Bugs by Assignment");
+            Console.WriteLine("=========================");
+            var activeBugsByAssignedTo = workItemStatsService.GetWorkItemCountByAssignedTo(tfsWorkItemStatsWorkItemType, tfsWorkItemStatsState, areaPaths);
+            foreach (var assignedToBugs in activeBugsByAssignedTo)
+            {
+                Console.WriteLine("{0} {1}", assignedToBugs.Key, assignedToBugs.Count);
+            }
+
+            Console.WriteLine();
+
+            // Get work item stats - active bugs by priority
+            Console.WriteLine("Active Bugs by Priority");
+            Console.WriteLine("=======================");
+            var activeBugsByPriority = workItemStatsService.GetWorkItemCountByPriority(tfsWorkItemStatsWorkItemType, tfsWorkItemStatsState, areaPaths);
+            foreach (var priorityBugs in activeBugsByPriority)
+            {
+                Console.WriteLine("{0} {1}", priorityBugs.Key, priorityBugs.Count);
+            }
+
+            Console.WriteLine();
+
+            // Get iteration info - sprint and days remaining
+            Console.WriteLine("Iteration info");
+            Console.WriteLine("==============");
+            var iterationInfoService = new IterationInfoService(tfsServerUri, tfsCollectionName, tfsProjectName, tfsRootIterationPath);
             var iterationInfo = iterationInfoService.GetCurrentIterationInfo();
 
             Console.WriteLine("{0} {1} {2:d} {3:d}", iterationInfo.Name, iterationInfo.Path, iterationInfo.StartDate, iterationInfo.EndDate);
+            Console.WriteLine();
 
-            var buildInfoService = new BuildInfoService(
-                ConfigurationManager.AppSettings["TfsServerUri"],
-                ConfigurationManager.AppSettings["TfsCollectionName"],
-                ConfigurationManager.AppSettings["TfsProjectName"]);
-
-            var buildDefinitonNames = ConfigurationManager.AppSettings["TfsBuildDefinitionNames"].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            // Get build infos
+            Console.WriteLine("Build info");
+            Console.WriteLine("==========");
+            var buildInfoService = new BuildInfoService(tfsServerUri, tfsCollectionName, tfsProjectName);
+            var buildDefinitonNames = tfsBuildDefinitonNames.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
             while (true)
             {

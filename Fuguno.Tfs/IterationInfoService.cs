@@ -25,29 +25,34 @@
         {
             Trace.TraceInformation(string.Format("{0} -> GetCurrentIterationInfo", DateTime.Now));
 
-            IterationInfo iterationInfo = null;
+            try
+            {
+                IterationInfo iterationInfo = null;
 
-            var projectInfo = _commonStructureService.GetProjectFromName(_tfsProjectName);
-            NodeInfo[] structures = _commonStructureService.ListStructures(projectInfo.Uri);
-            var projectLifecycleInfo = structures.FirstOrDefault(n => n.StructureType.Equals("ProjectLifecycle"));
-            var iterationXmlElement = _commonStructureService.GetNodesXml(new string[] { projectLifecycleInfo.Uri }, true);
-            var rootIterationXmlNode = iterationXmlElement.SelectSingleNode(string.Format("//Node[@Path='{0}']", _tfsRootIterationPath));
-            if (rootIterationXmlNode == null)
-            {
-                Trace.TraceError(string.Format("{0} ! GetCurrentIterationInfo - can't find iterationPath='{1}'", DateTime.Now, _tfsRootIterationPath));
-            }
-            else
-            {
-                List<IterationInfo> iterationInfos = new List<IterationInfo>();
-                GetIterationDates(rootIterationXmlNode, _tfsProjectName, ref iterationInfos);
-                if (iterationInfos != null)
+                var projectInfo = _commonStructureService.GetProjectFromName(_tfsProjectName);
+                NodeInfo[] structures = _commonStructureService.ListStructures(projectInfo.Uri);
+                var projectLifecycleInfo = structures.FirstOrDefault(n => n.StructureType.Equals("ProjectLifecycle"));
+                var iterationXmlElement = _commonStructureService.GetNodesXml(new string[] { projectLifecycleInfo.Uri }, true);
+                var rootIterationXmlNode = iterationXmlElement.SelectSingleNode(string.Format("//Node[@Path='{0}']", _tfsRootIterationPath));
+                if (rootIterationXmlNode == null)
                 {
-                    iterationInfo = iterationInfos.FirstOrDefault(n => DateTime.Now >= n.StartDate && DateTime.Now <= n.EndDate);
+                    Trace.TraceError(string.Format("{0} ! GetCurrentIterationInfo - can't find iterationPath='{1}'", DateTime.Now, _tfsRootIterationPath));
                 }
-
+                else
+                {
+                    List<IterationInfo> iterationInfos = new List<IterationInfo>();
+                    GetIterationDates(rootIterationXmlNode, _tfsProjectName, ref iterationInfos);
+                    if (iterationInfos != null)
+                    {
+                        iterationInfo = iterationInfos.FirstOrDefault(n => DateTime.Now >= n.StartDate && DateTime.Now <= n.EndDate);
+                    }
+                }
+                return iterationInfo;
+            }
+            finally
+            {
                 Trace.TraceInformation(string.Format("{0} <- GetCurrentIterationInfo", DateTime.Now));
             }
-            return iterationInfo;
         }
 
         private static void GetIterationDates(XmlNode node, string projectName, ref List<IterationInfo> iterationInfos)

@@ -1,7 +1,11 @@
 ﻿namespace Fuguno.Tfs
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     public interface IWorkItemStatsService
     {
-        //long GetWorkItemCount(string workItemType, string[] areaPaths, string[] states);
+        IEnumerable<WorkItemStat> GetWorkItemCountByAssignedTo(string workItemType, string state, string[] areaPaths);
+        IEnumerable<WorkItemStat> GetWorkItemCountByPriority(string workItemType, string state, string[] areaPaths);
     }
 }

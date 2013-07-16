@@ -25,64 +25,74 @@
         {
             Trace.TraceInformation(string.Format("{0} -> GetLatestBuildInfos", DateTime.Now));
 
-            List<BuildInfo> buildInfos = new List<BuildInfo>();
-
-            foreach (var buildDefinitionName in buildDefinitionNames)
+            try
             {
-                buildInfos.Add(GetLatestBuildInfo(buildDefinitionName));
+                List<BuildInfo> buildInfos = new List<BuildInfo>();
+
+                foreach (var buildDefinitionName in buildDefinitionNames)
+                {
+                    buildInfos.Add(GetLatestBuildInfo(buildDefinitionName));
+                }
+
+                return buildInfos;
             }
-
-            Trace.TraceInformation(string.Format("{0} <- GetLatestBuildInfos", DateTime.Now));
-
-            return buildInfos;
+            finally
+            {
+                Trace.TraceInformation(string.Format("{0} <- GetLatestBuildInfos", DateTime.Now));
+            }
         }
 
         public BuildInfo GetLatestBuildInfo(string buildDefinitionName)
         {
             Trace.TraceInformation(string.Format("{0} -> GetLatestBuildInfo buildDefinitionName={1}", DateTime.Now, buildDefinitionName));
 
-            BuildInfo buildInfo = null;
-
-            var buildDefinitionSpec = _buildServer.CreateBuildDetailSpec(_tfsProjectName, buildDefinitionName);
-            buildDefinitionSpec.InformationTypes = null;
-            buildDefinitionSpec.MaxBuildsPerDefinition = 1;
-            buildDefinitionSpec.QueryOrder = BuildQueryOrder.FinishTimeDescending;
-
-            var buildDetails = _buildServer.QueryBuilds(buildDefinitionSpec);
-            if (buildDetails == null || buildDetails.Builds == null || buildDetails.Builds.Length == 0)
+            try
             {
-                throw new ApplicationException(string.Format("Build Definition '{0}' not found", buildDefinitionName));
-            }
+                BuildInfo buildInfo = null;
 
-            var buildDetail = buildDetails.Builds[0]; // we only requested 1 so take the first
-            if (buildDetail != null)
-            {
-                buildInfo = new BuildInfo()
+                var buildDefinitionSpec = _buildServer.CreateBuildDetailSpec(_tfsProjectName, buildDefinitionName);
+                buildDefinitionSpec.InformationTypes = null;
+                buildDefinitionSpec.MaxBuildsPerDefinition = 1;
+                buildDefinitionSpec.QueryOrder = BuildQueryOrder.FinishTimeDescending;
+
+                var buildDetails = _buildServer.QueryBuilds(buildDefinitionSpec);
+                if (buildDetails == null || buildDetails.Builds == null || buildDetails.Builds.Length == 0)
                 {
-                    Name = buildDefinitionName,
-                    BuildNumber = buildDetail.BuildNumber,
-                    Status = buildDetail.Status.ToString(),
-                    StartTime = buildDetail.StartTime == DateTime.MinValue ? (DateTime?)null : buildDetail.StartTime,
-                    LastChangeTime = buildDetail.LastChangedOn,
-                    FinishTime = buildDetail.FinishTime == DateTime.MinValue ? (DateTime?)null : buildDetail.FinishTime,
-                    RequestedBy = buildDetail.RequestedBy,
-                    RequestedFor = buildDetail.RequestedFor
-                };
+                    throw new ApplicationException(string.Format("Build Definition '{0}' not found", buildDefinitionName));
+                }
 
-                buildInfo.TestRunInfos = GetTestRunInfos(buildDetail.Uri);
+                var buildDetail = buildDetails.Builds[0]; // we only requested 1 so take the first
+                if (buildDetail != null)
+                {
+                    buildInfo = new BuildInfo()
+                    {
+                        Name = buildDefinitionName,
+                        BuildNumber = buildDetail.BuildNumber,
+                        Status = buildDetail.Status.ToString(),
+                        StartTime = buildDetail.StartTime == DateTime.MinValue ? (DateTime?)null : buildDetail.StartTime,
+                        LastChangeTime = buildDetail.LastChangedOn,
+                        FinishTime = buildDetail.FinishTime == DateTime.MinValue ? (DateTime?)null : buildDetail.FinishTime,
+                        RequestedBy = buildDetail.RequestedBy,
+                        RequestedFor = buildDetail.RequestedFor
+                    };
 
-                long totalTestCount, totalTestPassedCount, totalTestFailedCount, totalTestInconclusiveCount;
-                CalculateTotalTestCounts(buildInfo.TestRunInfos, out totalTestCount, out totalTestPassedCount, out totalTestFailedCount, out totalTestInconclusiveCount);
+                    buildInfo.TestRunInfos = GetTestRunInfos(buildDetail.Uri);
 
-                buildInfo.TotalTestCount = totalTestCount;
-                buildInfo.TotalTestPassedCount = totalTestPassedCount;
-                buildInfo.TotalTestFailedCount = totalTestFailedCount;
-                buildInfo.TotalTestInconclusiveCount = totalTestInconclusiveCount;
+                    long totalTestCount, totalTestPassedCount, totalTestFailedCount, totalTestInconclusiveCount;
+                    CalculateTotalTestCounts(buildInfo.TestRunInfos, out totalTestCount, out totalTestPassedCount, out totalTestFailedCount, out totalTestInconclusiveCount);
+
+                    buildInfo.TotalTestCount = totalTestCount;
+                    buildInfo.TotalTestPassedCount = totalTestPassedCount;
+                    buildInfo.TotalTestFailedCount = totalTestFailedCount;
+                    buildInfo.TotalTestInconclusiveCount = totalTestInconclusiveCount;
+                }
+
+                return buildInfo;
             }
-
-            Trace.TraceInformation(string.Format("{0} <- GetLatestBuildInfo buildDefinitionName={1}", DateTime.Now, buildDefinitionName));
-            
-            return buildInfo;
+            finally
+            {
+                Trace.TraceInformation(string.Format("{0} <- GetLatestBuildInfo buildDefinitionName={1}", DateTime.Now, buildDefinitionName));
+            }
         }
 
         private List<TestRunInfo> GetTestRunInfos(Uri buildUri)
