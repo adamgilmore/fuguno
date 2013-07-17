@@ -21,27 +21,6 @@
             _testManagementService = tfsCollection.TestManagementService;
         }
 
-        public IEnumerable<BuildInfo> GetLatestBuildInfos(IEnumerable<string> buildDefinitionNames)
-        {
-            Trace.TraceInformation(string.Format("{0} -> GetLatestBuildInfos", DateTime.Now));
-
-            try
-            {
-                List<BuildInfo> buildInfos = new List<BuildInfo>();
-
-                foreach (var buildDefinitionName in buildDefinitionNames)
-                {
-                    buildInfos.Add(GetLatestBuildInfo(buildDefinitionName));
-                }
-
-                return buildInfos;
-            }
-            finally
-            {
-                Trace.TraceInformation(string.Format("{0} <- GetLatestBuildInfos", DateTime.Now));
-            }
-        }
-
         public BuildInfo GetLatestBuildInfo(string buildDefinitionName)
         {
             Trace.TraceInformation(string.Format("{0} -> GetLatestBuildInfo buildDefinitionName={1}", DateTime.Now, buildDefinitionName));
