@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Fuguno.Tfs
 {
-    public class WorkItemInfo
+    internal class WorkItemInfo
     {
         public int Id { get; set; }
         public int Priority { get; set; }
