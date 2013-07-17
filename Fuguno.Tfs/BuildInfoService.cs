@@ -55,10 +55,10 @@
                         RequestedFor = buildDetail.RequestedFor
                     };
 
-                    buildInfo.TestRunInfos = GetTestRunInfos(buildDetail.Uri);
+                    var testRunInfos = GetTestRunInfos(buildDetail.Uri);
 
                     long totalTestCount, totalTestPassedCount, totalTestFailedCount, totalTestInconclusiveCount;
-                    CalculateTotalTestCounts(buildInfo.TestRunInfos, out totalTestCount, out totalTestPassedCount, out totalTestFailedCount, out totalTestInconclusiveCount);
+                    CalculateTotalTestCounts(testRunInfos, out totalTestCount, out totalTestPassedCount, out totalTestFailedCount, out totalTestInconclusiveCount);
 
                     buildInfo.TotalTestCount = totalTestCount;
                     buildInfo.TotalTestPassedCount = totalTestPassedCount;

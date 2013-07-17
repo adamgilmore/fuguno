@@ -17,7 +17,6 @@
         public long TotalTestPassedCount { get; set; }
         public long TotalTestFailedCount { get; set; }
         public long TotalTestInconclusiveCount { get; set; }
-        public List<TestRunInfo> TestRunInfos { get; set; }
         public TimeSpan? ElapsedTime
         {
             get
