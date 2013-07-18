@@ -7,21 +7,25 @@
     public class WorkItemStatsController : ApiController
     {
         [HttpGet, ActionName("assignedto")]
-        public IEnumerable<WorkItemStat> GetWorkItemCountByAssignedTo(string server, string collection, string workItemType, string state, string areaPaths)
+        public IEnumerable<WorkItemStat> GetWorkItemCountByAssignedTo(string connectionName, string workItemType, string state, string areaPaths)
         {
+            var parameterMap = Helpers.GetConnectionParameters(connectionName);
+
             var areaPathsArray = areaPaths.Split(new char[] { ',' });
 
-            var service = new WorkItemStatsService(server, collection);
+            var service = new WorkItemStatsService(parameterMap["Server"], parameterMap["Collection"]);
             return service.GetWorkItemCountByAssignedTo(workItemType, state, areaPathsArray);
 
         }
 
         [HttpGet, ActionName("priority")]
-        public IEnumerable<WorkItemStat> GetWorkItemCountByPriority(string server, string collection, string workItemType, string state, string areaPaths)
+        public IEnumerable<WorkItemStat> GetWorkItemCountByPriority(string connectionName, string workItemType, string state, string areaPaths)
         {
+            var parameterMap = Helpers.GetConnectionParameters(connectionName);
+
             var areaPathsArray = areaPaths.Split(new char[] { ',' });
 
-            var service = new WorkItemStatsService(server, collection);
+            var service = new WorkItemStatsService(parameterMap["Server"], parameterMap["Collection"]);
             return service.GetWorkItemCountByPriority(workItemType, state, areaPathsArray);
         }
     }

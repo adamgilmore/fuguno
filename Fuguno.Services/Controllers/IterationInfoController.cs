@@ -5,9 +5,11 @@
 
     public class IterationInfoController : ApiController
     {
-        public IterationInfo Get(string server, string collection, string project, string rootIterationPath)
+        public IterationInfo Get(string connectionName, string rootIterationPath)
         {
-            var service = new IterationInfoService(server, collection, project, rootIterationPath);
+            var parameterMap = Helpers.GetConnectionParameters(connectionName);
+
+            var service = new IterationInfoService(parameterMap["Server"], parameterMap["Collection"], parameterMap["Project"], rootIterationPath);
             return service.GetCurrentIterationInfo();
         }
     }

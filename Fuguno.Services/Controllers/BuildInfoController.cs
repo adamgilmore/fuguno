@@ -1,18 +1,15 @@
-﻿using Fuguno.Tfs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-
-namespace Fuguno.Services.Controllers
+﻿namespace Fuguno.Services.Controllers
 {
+    using Fuguno.Tfs;
+    using System.Web.Http;
+
     public class BuildInfoController : ApiController
     {
-        public BuildInfo Get(string server, string collection, string project, string buildDefinitionName)
+        public BuildInfo Get(string connectionName, string buildDefinitionName)
         {
-            var service = new BuildInfoService(server, collection, project);
+            var parameterMap = Helpers.GetConnectionParameters(connectionName);
+
+            var service = new BuildInfoService(parameterMap["Server"], parameterMap["Collection"], parameterMap["Project"]);
             return service.GetLatestBuildInfo(buildDefinitionName);
         }
     }
