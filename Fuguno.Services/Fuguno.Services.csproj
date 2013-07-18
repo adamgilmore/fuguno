@@ -163,6 +163,7 @@
     <Compile Include="Controllers\BuildInfoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IterationInfoController.cs" />
+    <Compile Include="Controllers\WorkItemStatsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
