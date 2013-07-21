@@ -5,6 +5,11 @@
 
 
 <div id="body">
+    <script type="text/template" id="iterationInfoTemplate">
+        <h1><%= formatString(Name, "-") %></h1>
+        <span><% print(EndDate.isBlank() ? "-" : Date.create(EndDate).daysFromNow() + " days left") %></span>
+    </script>
+
     <script type="text/template" id="buildInfoTemplate">
         <li class="<%= Status %>">
             <h2 id="Name"><%= Name %> <% formatString(BuildNumber, "") %></h2>
@@ -17,6 +22,9 @@
         </li>
     </script>
 
+    <div id="iterationInfo">
+    </div>
+
     <ul id="buildInfoList">
     </ul>
 
@@ -25,19 +33,26 @@
     <script src="~/Scripts/backbone.js"></script>
     <script src="~/Scripts/sugar-full.development.js"></script>
     <script src="~/Scripts/App/buildinfo.js"></script>
+    <script src="~/Scripts/App/iterationinfo.js"></script>
 
     <script>
+        var iterationInfoView = new IterationInfoView({
+            el: $("#iterationInfo"),
+            model: new IterationInfoModel({ ConnectionName: "ottstfs", Path: "\\ISS Media Platform\\Iteration\\Cloud" })
+        });
+
         var buildInfoList = new BuildInfoListView({ el: $("#buildInfoList") });
         buildInfoList.addItem("ottstfs", "Cloud.Main.Rolling");
         buildInfoList.addItem("ottstfs", "Cloud.Main.CI");
         buildInfoList.addItem("ottstfs", "Cloud.Main.Daily");
 
-        refreshList();
-        window.setInterval(refreshList, 60000);
+        refreshPage();
+        window.setInterval(refreshPage, 60000);
 
-        function refreshList() {
-            console.log("refreshing list..");
-            fetchModels(buildInfoList.collection.models);
+        function refreshPage() {
+            console.log("refreshing page...");
+            fetchIterationInfoModel(iterationInfoView.model);
+            fetchBuildInfoModels(buildInfoList.collection.models);
         }
 
         function formatString(str, placeholder) {
