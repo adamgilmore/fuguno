@@ -1,0 +1,31 @@
+﻿@{
+    Layout = "_Layout.cshtml";
+    ViewBag.Title = "Index";
+}
+
+
+<div id="body">
+    <script type="text/template" id="buildInfoTemplate">
+        <li>
+            <label id="name"><%= name %></label>
+            <label id="definition"><%= definition %></label>
+            <label id="triggeredBy"><%= triggeredBy %></label>
+        </li>
+    </script>
+
+    <button id="add">Add item</button>
+
+    <ul id="buildInfoList">
+    </ul>
+
+    <script src="~/Scripts/jquery-1.8.2.js"></script>
+    <script src="~/Scripts/underscore.js"></script>
+    <script src="~/Scripts/backbone.js"></script>
+    <script src="~/Scripts/App/buildinfo.js"></script>
+
+    <script>
+        var buildInfoList = new BuildInfoListView({ el: $("#buildInfoList") });
+
+        $("#add").click(function (e) { buildInfoList.addItem(); });
+    </script>
+</div>
