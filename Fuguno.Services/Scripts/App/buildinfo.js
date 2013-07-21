@@ -95,7 +95,6 @@ function fetchModels(models) {
     _(models).each(function (item) {
         item.fetch({
             success: function (model, response) {
-                console.log(response);
             }});
     }, this);
 }

@@ -6,24 +6,16 @@
 
 <div id="body">
     <script type="text/template" id="buildInfoTemplate">
-        <li>
-            <label id="Name"><%= Name %></label>
-            <label id="BuildNumber"><%= BuildNumber %></label>
-            <label id="Status"><%= Status %></label>
-            <label id="StartTime"><%= StartTime %></label>
-            <label id="FinishTime"><%= FinishTime %></label>
-            <label id="LastChangeTime"><%= LastChangeTime %></label>
-            <label id="ElapsedTime"><%= ElapsedTime %></label>
-            <label id="RequestedBy"><%= RequestedBy %></label>
-            <label id="RequestedFor"><%= RequestedFor %></label>
-            <label id="TotalTestCount"><%= TotalTestCount %></label>
-            <label id="TotalTestPassedCount"><%= TotalTestPassedCount %></label>
-            <label id="TotalTestFailedCount"><%= TotalTestFailedCount %></label>
-            <label id="TotalTestInconclusiveCount"><%= TotalTestInconclusiveCount %></label>
+        <li class="<%= Status %>">
+            <h2 id="Name"><%= Name %> <% formatString(BuildNumber, "") %></h2>
+            <p><%= formatString(Status, "-") %></p>
+            <p>Requested by <%= formatString(RequestedFor, "-") %></p>
+            <p>Started at <%= formatDate(StartTime, "-") %></p>
+            <p>Finished at <%= formatDate(FinishTime, "-") %></p>
+            <p>Took <%= formatTime(ElapsedTime, "-") %></p>
+            <p>Test pass rate of <% print(_.isNumber(TotalTestCount) == false ? "-" : ((TotalTestPassedCount / TotalTestCount) * 100).round(2) + '%') %></p>
         </li>
     </script>
-
-    <button id="fetch">Fetch items</button>
 
     <ul id="buildInfoList">
     </ul>
@@ -31,6 +23,7 @@
     <script src="~/Scripts/jquery-1.8.2.js"></script>
     <script src="~/Scripts/underscore.js"></script>
     <script src="~/Scripts/backbone.js"></script>
+    <script src="~/Scripts/sugar-full.development.js"></script>
     <script src="~/Scripts/App/buildinfo.js"></script>
 
     <script>
@@ -39,8 +32,27 @@
         buildInfoList.addItem("ottstfs", "Cloud.Main.CI");
         buildInfoList.addItem("ottstfs", "Cloud.Main.Daily");
 
-        $("#fetch").click(function (e) {
+        refreshList();
+        window.setInterval(refreshList, 60000);
+
+        function refreshList() {
+            console.log("refreshing list..");
             fetchModels(buildInfoList.collection.models);
-        });
+        }
+
+        function formatString(str, placeholder) {
+            if (_.isNull(str) || str.isBlank()) return placeholder;
+            return str;
+        }
+
+        function formatTime(str, placeholder) {
+            if (_.isNull(str) || str.isBlank()) return placeholder;
+            return str;
+        }
+
+        function formatDate(date, placeholder) {
+            if (_.isNull(date) || (_.isString(date) && date.isBlank())) return placeholder;
+            return Date.create(date).format();
+        }
     </script>
 </div>
