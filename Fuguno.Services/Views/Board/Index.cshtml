@@ -7,13 +7,23 @@
 <div id="body">
     <script type="text/template" id="buildInfoTemplate">
         <li>
-            <label id="name"><%= name %></label>
-            <label id="definition"><%= definition %></label>
-            <label id="triggeredBy"><%= triggeredBy %></label>
+            <label id="Name"><%= Name %></label>
+            <label id="BuildNumber"><%= BuildNumber %></label>
+            <label id="Status"><%= Status %></label>
+            <label id="StartTime"><%= StartTime %></label>
+            <label id="FinishTime"><%= FinishTime %></label>
+            <label id="LastChangeTime"><%= LastChangeTime %></label>
+            <label id="ElapsedTime"><%= ElapsedTime %></label>
+            <label id="RequestedBy"><%= RequestedBy %></label>
+            <label id="RequestedFor"><%= RequestedFor %></label>
+            <label id="TotalTestCount"><%= TotalTestCount %></label>
+            <label id="TotalTestPassedCount"><%= TotalTestPassedCount %></label>
+            <label id="TotalTestFailedCount"><%= TotalTestFailedCount %></label>
+            <label id="TotalTestInconclusiveCount"><%= TotalTestInconclusiveCount %></label>
         </li>
     </script>
 
-    <button id="add">Add item</button>
+    <button id="fetch">Fetch items</button>
 
     <ul id="buildInfoList">
     </ul>
@@ -25,7 +35,12 @@
 
     <script>
         var buildInfoList = new BuildInfoListView({ el: $("#buildInfoList") });
+        buildInfoList.addItem("ottstfs", "Cloud.Main.Rolling");
+        buildInfoList.addItem("ottstfs", "Cloud.Main.CI");
+        buildInfoList.addItem("ottstfs", "Cloud.Main.Daily");
 
-        $("#add").click(function (e) { buildInfoList.addItem(); });
+        $("#fetch").click(function (e) {
+            fetchModels(buildInfoList.collection.models);
+        });
     </script>
 </div>

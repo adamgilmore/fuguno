@@ -1,11 +1,30 @@
 ﻿/// Model
 var BuildInfoModel = Backbone.Model.extend({
+    urlRoot: "api/buildinfo",
     defaults: {
-        name: "C",
-        definition: "CI",
-        startTime: "",
-        finishTime: "",
-        triggeredBy: "Adam Gilmore"
+        ConnectionName: "",
+        Name: "",
+        BuildNumber: "",
+        Status: "",
+        StartTime: "",
+        FinishTime: "",
+        LastChangeTime: "",
+        RequestedBy: "",
+        RequestedFor: "",
+        TotalTestCount: "",
+        TotalTestPassedCount: "",
+        TotalTestFailedCount: "",
+        TotalTestInconclusiveCount: "",
+        ElapsedTime: ""
+    },
+
+    url: function () {
+        var params = { 
+            connectionName: this.get("ConnectionName"), 
+            buildDefinitionName: this.get("Name") 
+        }
+
+        return this.urlRoot + "?" + $.param(params);
     }
 });
 
@@ -54,9 +73,11 @@ var BuildInfoListView = Backbone.View.extend({
         }, this);
     },
 
-    // Button "click" event handler - adds a new model to the collection - which triggers the "add" event on the collection which is bound to the "appendItem" method
-    addItem: function () {
+    // adds a new model to the collection - which triggers the "add" event on the collection which is bound to the "appendItem" method
+    addItem: function (connectionName, name) {
         var item = new BuildInfoModel();
+        item.set("ConnectionName", connectionName);
+        item.set("Name", name);
         this.collection.add(item);
     },
 
@@ -69,3 +90,12 @@ var BuildInfoListView = Backbone.View.extend({
         this.$el.append(itemView.render().el);
     }
 });
+
+function fetchModels(models) {
+    _(models).each(function (item) {
+        item.fetch({
+            success: function (model, response) {
+                console.log(response);
+            }});
+    }, this);
+}
