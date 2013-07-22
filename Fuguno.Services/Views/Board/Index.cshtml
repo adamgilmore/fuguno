@@ -17,8 +17,8 @@
             <p>Requested by <%= formatString(RequestedFor, "-") %></p>
             <p>Started at <%= formatDate(StartTime, "-") %></p>
             <p>Finished at <%= formatDate(FinishTime, "-") %></p>
-            <p>Took <%= formatTime(ElapsedTime, "-") %></p>
-            <p>Test pass rate of <% print(_.isNumber(TotalTestCount) == false ? "-" : ((TotalTestPassedCount / TotalTestCount) * 100).round(2) + '%') %></p>
+            <p>Elapsed <%= formatTime(ElapsedTime, "-") %></p>
+            <p>Test pass rate of <%= formatTestPassPercentage(TotalTestCount, TotalTestPassedCount, "-") %></p>
         </li>
     </script>
 
@@ -45,6 +45,7 @@
         buildInfoList.addItem("ottstfs", "Cloud.Main.Rolling");
         buildInfoList.addItem("ottstfs", "Cloud.Main.CI");
         buildInfoList.addItem("ottstfs", "Cloud.Main.Daily");
+        buildInfoList.addItem("ottstfs", "Cloud.Main.Manifest.Deployment.DevTest");
 
         refreshPage();
         window.setInterval(refreshPage, 60000);
@@ -69,5 +70,12 @@
             if (_.isNull(date) || (_.isString(date) && date.isBlank())) return placeholder;
             return Date.create(date).format();
         }
+
+        function formatTestPassPercentage(totalTestCount, totalTestPassedCount, placeholder) {
+            if (_.isNaN(totalTestCount) || _.isNaN(totalTestPassedCount)) return placeholder;
+            if (totalTestPassedCount == 0 || totalTestCount == 0) return placeholder;
+            return ((totalTestPassedCount / totalTestCount) * 100).round(2) + "%";
+        }
+         
     </script>
 </div>
