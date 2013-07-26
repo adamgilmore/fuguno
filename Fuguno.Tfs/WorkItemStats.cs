@@ -10,4 +10,9 @@ namespace Fuguno.Tfs
         public string Key { get; set; }
         public int Count { get; set; }
     }
+
+    public class WorkItemStats
+    {
+        public IEnumerable<WorkItemStat> Data { get; set; }
+    }
 }

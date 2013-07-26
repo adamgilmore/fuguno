@@ -45,8 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BugJailInfo.cs" />
+    <Compile Include="BugJailInfoService.cs" />
     <Compile Include="BuildInfo.cs" />
     <Compile Include="BuildInfoService.cs" />
+    <Compile Include="Helpers.cs" />
+    <Compile Include="IBugJailInfoService.cs" />
     <Compile Include="IBuildInfoService.cs" />
     <Compile Include="IIterationInfoService.cs" />
     <Compile Include="IterationInfo.cs" />

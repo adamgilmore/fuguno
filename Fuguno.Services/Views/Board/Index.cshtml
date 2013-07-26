@@ -6,13 +6,14 @@
 
 <div id="body">
     <script type="text/template" id="iterationInfoTemplate">
-        <h1><%= formatString(Name, "-") %></h1>
+        <h2><%= formatString(Name, "-") %></h2>
         <span><% print(EndDate.isBlank() ? "-" : Date.create(EndDate).daysFromNow() + " days left") %></span>
     </script>
 
     <script type="text/template" id="buildInfoTemplate">
         <li class="<%= Status %>">
-            <h2 id="Name"><%= Name %> <% formatString(BuildNumber, "") %></h2>
+            <h2 id="Name"><%= Name %></h2>
+            <p><%= formatString(BuildNumber, "-") %></p>
             <p><%= formatString(Status, "-") %></p>
             <p>Requested by <%= formatString(RequestedFor, "-") %></p>
             <p>Started at <%= formatDate(StartTime, "-") %></p>
@@ -22,38 +23,69 @@
         </li>
     </script>
 
-    <div id="iterationInfo">
+    <div id="wrap">
+        <div id="header">
+            <div id="iterationInfo"></div>
+        </div>
+        <div id="main">
+            <ul id="buildInfoList"></ul>
+        </div>
+        <div id="sidebar">
+            <h3>Active bugs by priority</h3>
+            <div id="chart"></div>
+        </div>
     </div>
 
-    <ul id="buildInfoList">
-    </ul>
-
-    <script src="~/Scripts/jquery-1.8.2.js"></script>
+    <script src="~/Scripts/jquery-2.0.3.js"></script>
+    <script src="~/Scripts/flot/jquery.flot.js"></script>
+    <script src="~/Scripts/flot/jquery.flot.categories.js"></script>
     <script src="~/Scripts/underscore.js"></script>
     <script src="~/Scripts/backbone.js"></script>
     <script src="~/Scripts/sugar-full.development.js"></script>
     <script src="~/Scripts/App/buildinfo.js"></script>
     <script src="~/Scripts/App/iterationinfo.js"></script>
+    <script src="~/Scripts/App/workitemstats.js"></script>
 
     <script>
-        var iterationInfoView = new IterationInfoView({
-            el: $("#iterationInfo"),
-            model: new IterationInfoModel({ ConnectionName: "ottstfs", Path: "\\ISS Media Platform\\Iteration\\Cloud" })
-        });
+        var TfsConnectionName = "ottstfs";
+        var TfsRootIterationPath = "\\ISS Media Platform\\Iteration\\Cloud";
 
-        var buildInfoList = new BuildInfoListView({ el: $("#buildInfoList") });
-        buildInfoList.addItem("ottstfs", "Cloud.Main.Rolling");
-        buildInfoList.addItem("ottstfs", "Cloud.Main.CI");
-        buildInfoList.addItem("ottstfs", "Cloud.Main.Daily");
-        buildInfoList.addItem("ottstfs", "Cloud.Main.Manifest.Deployment.DevTest");
+        var iterationInfoView;
+        var buildInfoListView;
+        var bugsByPriorityView;
+        var bugPriorityModel;
 
-        refreshPage();
-        window.setInterval(refreshPage, 60000);
+        loadPage();
+
+        function loadPage() {
+            iterationInfoView = new IterationInfoView({
+                el: $("#iterationInfo"),
+                model: new IterationInfoModel({ ConnectionName: TfsConnectionName, Path: TfsRootIterationPath})
+            });
+
+            buildInfoListView = new BuildInfoListView({ el: $("#buildInfoList") });
+            buildInfoListView.addItem(TfsConnectionName, "Cloud.Main.Rolling");
+            buildInfoListView.addItem(TfsConnectionName, "Cloud.Main.CI");
+            buildInfoListView.addItem(TfsConnectionName, "Cloud.Main.Daily");
+            buildInfoListView.addItem(TfsConnectionName, "Cloud.Main.Manifest.Deployment.DevTest");
+
+            bugPriorityModel = new WorkItemStatModel({
+                ConnectionName: TfsConnectionName,
+                Action: "priority",
+                WorkItemType: "Bug",
+                State: "Active",
+                AreaPaths: "ISS Media Platform\\Cloud\\ContentInfrastructure\\Operator Portal platform, ISS Media Platform\\Cloud\\ContentInfrastructure\\Account Management, ISS Media Platform\\Cloud\\ContentInfrastructure\\Monetisation"
+            });
+
+
+            refreshPage();
+            window.setInterval(refreshPage, 60000);
+        }
 
         function refreshPage() {
-            console.log("refreshing page...");
             fetchIterationInfoModel(iterationInfoView.model);
-            fetchBuildInfoModels(buildInfoList.collection.models);
+            fetchBuildInfoModels(buildInfoListView.collection.models);
+            fetchWorkItemStatModel(bugPriorityModel);
         }
 
         function formatString(str, placeholder) {
@@ -76,6 +108,5 @@
             if (totalTestPassedCount == 0 || totalTestCount == 0) return placeholder;
             return ((totalTestPassedCount / totalTestCount) * 100).round(2) + "%";
         }
-         
     </script>
 </div>

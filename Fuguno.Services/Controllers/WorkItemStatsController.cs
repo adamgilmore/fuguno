@@ -7,7 +7,7 @@
     public class WorkItemStatsController : ApiController
     {
         [HttpGet, ActionName("assignedto")]
-        public IEnumerable<WorkItemStat> GetWorkItemCountByAssignedTo(string connectionName, string workItemType, string state, string areaPaths)
+        public WorkItemStats GetWorkItemCountByAssignedTo(string connectionName, string workItemType, string state, string areaPaths)
         {
             var parameterMap = Helpers.GetConnectionParameters(connectionName);
 
@@ -19,7 +19,7 @@
         }
 
         [HttpGet, ActionName("priority")]
-        public IEnumerable<WorkItemStat> GetWorkItemCountByPriority(string connectionName, string workItemType, string state, string areaPaths)
+        public WorkItemStats GetWorkItemCountByPriority(string connectionName, string workItemType, string state, string areaPaths)
         {
             var parameterMap = Helpers.GetConnectionParameters(connectionName);
 

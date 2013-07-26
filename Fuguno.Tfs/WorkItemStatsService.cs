@@ -1,11 +1,11 @@
 ﻿namespace Fuguno.Tfs
 {
     using Microsoft.TeamFoundation.WorkItemTracking.Client;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Text;
 
     public class WorkItemStatsService : IWorkItemStatsService
     {
@@ -25,7 +25,7 @@ using System.Text;
             _workItemStore = tfsCollection.WorkItemStore;
         }
 
-        public IEnumerable<WorkItemStat> GetWorkItemCountByAssignedTo(string workItemType, string state, string[] areaPaths)
+        public WorkItemStats GetWorkItemCountByAssignedTo(string workItemType, string state, string[] areaPaths)
         {
             Trace.TraceInformation(string.Format("{0} -> GetWorkItemCountByAssignedTo", DateTime.Now));
 
@@ -34,16 +34,19 @@ using System.Text;
                 // build query
                 var queryText = new StringBuilder(string.Format(WorkItemCountQueryTemplate, workItemType));
                 queryText.AppendFormat(" AND State = '{0}'", state);
-                queryText.Append(CreateAreaPathQueryFragment(areaPaths));
+                queryText.Append(Helpers.CreateAreaPathQueryFragment(areaPaths));
 
                 // run query
-                var workItemInfos = RunQuery(queryText);
+                var workItemInfos = RunQuery(queryText.ToString());
 
                 // group results
-                return workItemInfos
+                var workItemStats = new WorkItemStats();
+                workItemStats.Data = workItemInfos
                     .GroupBy(workItemInfo => workItemInfo.AssignedTo)
                     .Select(list => new WorkItemStat() { Key = list.Key, Count = list.Count() })
                     .OrderBy(stat => stat.Count);
+
+                return workItemStats;
             }
             finally
             {
@@ -51,7 +54,7 @@ using System.Text;
             }
         }
 
-        public IEnumerable<WorkItemStat> GetWorkItemCountByPriority(string workItemType, string state, string[] areaPaths)
+        public WorkItemStats GetWorkItemCountByPriority(string workItemType, string state, string[] areaPaths)
         {
             Trace.TraceInformation(string.Format("{0} -> GetWorkItemCountByPriority", DateTime.Now));
 
@@ -60,16 +63,19 @@ using System.Text;
                 // build query
                 var queryText = new StringBuilder(string.Format(WorkItemCountQueryTemplate, workItemType));
                 queryText.AppendFormat(" AND State = '{0}'", state);
-                queryText.Append(CreateAreaPathQueryFragment(areaPaths));
+                queryText.Append(Helpers.CreateAreaPathQueryFragment(areaPaths));
 
                 // run query
-                var workItemInfos = RunQuery(queryText);
+                var workItemInfos = RunQuery(queryText.ToString());
 
                 // group results
-                return workItemInfos
+                var workItemStats = new WorkItemStats();
+                workItemStats.Data = workItemInfos
                     .GroupBy(workItemInfo => workItemInfo.Priority)
                     .Select(list => new WorkItemStat() { Key = list.Key.ToString(), Count = list.Count() })
                     .OrderBy(stat => stat.Key);
+
+                return workItemStats;
             }
             finally
             {
@@ -77,7 +83,7 @@ using System.Text;
             }
         }
 
-        private List<WorkItemInfo> RunQuery(StringBuilder queryText)
+        private List<WorkItemInfo> RunQuery(string queryText)
         {
             var workItemInfos = new List<WorkItemInfo>();
             var workItems = _workItemStore.Query(queryText.ToString());
@@ -92,34 +98,6 @@ using System.Text;
                 });
             }
             return workItemInfos;
-        }
-
-        private static string CreateAreaPathQueryFragment(string[] areaPaths)
-        {
-            var queryText = new StringBuilder();
-
-            if (areaPaths != null & areaPaths.Length > 0)
-            {
-                queryText.Append(" AND ");
-
-                if (areaPaths.Length > 1)
-                    queryText.Append("(");
-
-                bool prefixWithOr = false;
-                foreach (var areaPath in areaPaths)
-                {
-                    if (prefixWithOr == true)
-                        queryText.Append(" OR ");
-                    else
-                        prefixWithOr = true;
-                    queryText.AppendFormat("[Area Path] under '{0}'", areaPath.Trim());
-                }
-
-                if (areaPaths.Length > 1)
-                    queryText.Append(")");
-            }
-
-            return queryText.ToString();
         }
     }
 }

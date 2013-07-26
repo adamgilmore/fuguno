@@ -20,14 +20,26 @@
             var tfsWorkItemStatsState = ConfigurationManager.AppSettings["TfsWorkItemStatsState"];
             var tfsWorkItemStatsAreaPaths = ConfigurationManager.AppSettings["TfsWorkItemStatsAreaPaths"];
 
+            var areaPaths = tfsWorkItemStatsAreaPaths.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Get bug jail info
+            var bugJailInfoService = new BugJailInfoService(tfsServerUri, tfsCollectionName);
+
+            Console.WriteLine("Bug Jail");
+            Console.WriteLine("=========================");
+            var bugJailInfos = bugJailInfoService.GetBugJail(areaPaths);
+            foreach (var bugJailInfo in bugJailInfos)
+            {
+                Console.WriteLine("{0} {1}", bugJailInfo.Name, bugJailInfo.ImageUrl);
+            }
+
             // Get work item stats - active bugs by assigned to 
             var workItemStatsService = new WorkItemStatsService(tfsServerUri, tfsCollectionName);
-            var areaPaths = tfsWorkItemStatsAreaPaths.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
             Console.WriteLine("Active Bugs by Assignment");
             Console.WriteLine("=========================");
             var activeBugsByAssignedTo = workItemStatsService.GetWorkItemCountByAssignedTo(tfsWorkItemStatsWorkItemType, tfsWorkItemStatsState, areaPaths);
-            foreach (var assignedToBugs in activeBugsByAssignedTo)
+            foreach (var assignedToBugs in activeBugsByAssignedTo.Data)
             {
                 Console.WriteLine("{0} {1}", assignedToBugs.Key, assignedToBugs.Count);
             }
@@ -38,7 +50,7 @@
             Console.WriteLine("Active Bugs by Priority");
             Console.WriteLine("=======================");
             var activeBugsByPriority = workItemStatsService.GetWorkItemCountByPriority(tfsWorkItemStatsWorkItemType, tfsWorkItemStatsState, areaPaths);
-            foreach (var priorityBugs in activeBugsByPriority)
+            foreach (var priorityBugs in activeBugsByPriority.Data)
             {
                 Console.WriteLine("{0} {1}", priorityBugs.Key, priorityBugs.Count);
             }
