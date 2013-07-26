@@ -35,10 +35,3 @@ var IterationInfoView = Backbone.View.extend({
         return this;
     },
 });
-
-function fetchIterationInfoModel(model) {
-    model.fetch({
-        success: function (model, response) {
-        }
-    });
-}

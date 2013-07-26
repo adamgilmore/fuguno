@@ -88,13 +88,9 @@ var BuildInfoListView = Backbone.View.extend({
         });
 
         this.$el.append(itemView.render().el);
+    },
+
+    fetchCollection: function () {
+        _(this.collection.models).each(function (item) { item.fetch(); }, this)
     }
 });
-
-function fetchBuildInfoModels(models) {
-    _(models).each(function (item) {
-        item.fetch({
-            success: function (model, response) {
-            }});
-    }, this);
-}

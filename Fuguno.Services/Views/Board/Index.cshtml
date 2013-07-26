@@ -53,7 +53,6 @@
         var iterationInfoView;
         var buildInfoListView;
         var bugsByPriorityView;
-        var bugPriorityModel;
 
         loadPage();
 
@@ -69,23 +68,25 @@
             buildInfoListView.addItem(TfsConnectionName, "Cloud.Main.Daily");
             buildInfoListView.addItem(TfsConnectionName, "Cloud.Main.Manifest.Deployment.DevTest");
 
-            bugPriorityModel = new WorkItemStatModel({
-                ConnectionName: TfsConnectionName,
-                Action: "priority",
-                WorkItemType: "Bug",
-                State: "Active",
-                AreaPaths: "ISS Media Platform\\Cloud\\ContentInfrastructure\\Operator Portal platform, ISS Media Platform\\Cloud\\ContentInfrastructure\\Account Management, ISS Media Platform\\Cloud\\ContentInfrastructure\\Monetisation"
-            });
 
+            bugsByPriorityView = new WorkItemStatView({
+                model: new WorkItemStatModel({
+                    ConnectionName: TfsConnectionName,
+                    Action: "priority",
+                    WorkItemType: "Bug",
+                    State: "Active",
+                    AreaPaths: "ISS Media Platform\\Cloud\\ContentInfrastructure\\Operator Portal platform, ISS Media Platform\\Cloud\\ContentInfrastructure\\Account Management, ISS Media Platform\\Cloud\\ContentInfrastructure\\Monetisation"
+                })
+            });
 
             refreshPage();
             window.setInterval(refreshPage, 60000);
         }
 
         function refreshPage() {
-            fetchIterationInfoModel(iterationInfoView.model);
-            fetchBuildInfoModels(buildInfoListView.collection.models);
-            fetchWorkItemStatModel(bugPriorityModel);
+            iterationInfoView.model.fetch();
+            buildInfoListView.fetchCollection();
+            bugsByPriorityView.model.fetch();
         }
 
         function formatString(str, placeholder) {
