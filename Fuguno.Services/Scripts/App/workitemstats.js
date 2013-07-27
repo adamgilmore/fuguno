@@ -36,7 +36,7 @@ var WorkItemStatView = Backbone.View.extend({
             seriesData[i] = [data[i].Key, data[i].Count];
         }
 
-        $.plot("#chart", [seriesData], { series: { bars: { show: true, barWidth: 0.6, align: "center" } }, xaxis: { mode: "categories", tickLength: 0 } });
+        $.plot(this.$el.selector, [seriesData], { series: { bars: { show: true, barWidth: 0.6, align: "center" } }, xaxis: { mode: "categories", tickLength: 0 } });
         return this;
     },
 });

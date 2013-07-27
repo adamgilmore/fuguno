@@ -90,7 +90,7 @@ var BuildInfoListView = Backbone.View.extend({
         this.$el.append(itemView.render().el);
     },
 
-    fetchCollection: function () {
+    fetchModels: function () {
         _(this.collection.models).each(function (item) { item.fetch(); }, this)
     }
 });

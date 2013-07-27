@@ -16,12 +16,12 @@ html {
 }
 #main {
     float:left;
-    width:70%;
+    width:40%;
 }
 
 #sidebar {
     float:right;
-    width:30%;
+    width:50%;
 }
 
 #buildInfoList {  
@@ -83,7 +83,7 @@ html {
     background-color:lightyellow;
 }
 
-#chart {
-    width: 300px;
-    height: 200px;
+.chart {
+    width: 600px;
+    height: 300px;
 }

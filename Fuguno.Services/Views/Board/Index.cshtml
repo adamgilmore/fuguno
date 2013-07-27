@@ -32,7 +32,9 @@
         </div>
         <div id="sidebar">
             <h3>Active bugs by priority</h3>
-            <div id="chart"></div>
+            <div id="chart" class="chart"></div>
+            <h3>Active bugs by people</h3>
+            <div id="chart2" class="chart"></div>
         </div>
     </div>
 
@@ -53,6 +55,7 @@
         var iterationInfoView;
         var buildInfoListView;
         var bugsByPriorityView;
+        var bugsByAssignedToView;
 
         loadPage();
 
@@ -68,11 +71,22 @@
             buildInfoListView.addItem(TfsConnectionName, "Cloud.Main.Daily");
             buildInfoListView.addItem(TfsConnectionName, "Cloud.Main.Manifest.Deployment.DevTest");
 
-
             bugsByPriorityView = new WorkItemStatView({
+                el: $("#chart"),
                 model: new WorkItemStatModel({
                     ConnectionName: TfsConnectionName,
                     Action: "priority",
+                    WorkItemType: "Bug",
+                    State: "Active",
+                    AreaPaths: "ISS Media Platform\\Cloud\\ContentInfrastructure\\Operator Portal platform, ISS Media Platform\\Cloud\\ContentInfrastructure\\Account Management, ISS Media Platform\\Cloud\\ContentInfrastructure\\Monetisation"
+                })
+            });
+
+            bugsByAssignedToView = new WorkItemStatView({
+                el: $("#chart2"),
+                model: new WorkItemStatModel({
+                    ConnectionName: TfsConnectionName,
+                    Action: "assignedto",
                     WorkItemType: "Bug",
                     State: "Active",
                     AreaPaths: "ISS Media Platform\\Cloud\\ContentInfrastructure\\Operator Portal platform, ISS Media Platform\\Cloud\\ContentInfrastructure\\Account Management, ISS Media Platform\\Cloud\\ContentInfrastructure\\Monetisation"
@@ -85,8 +99,9 @@
 
         function refreshPage() {
             iterationInfoView.model.fetch();
-            buildInfoListView.fetchCollection();
+            buildInfoListView.fetchModels();
             bugsByPriorityView.model.fetch();
+            bugsByAssignedToView.model.fetch();
         }
 
         function formatString(str, placeholder) {
