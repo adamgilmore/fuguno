@@ -29,14 +29,22 @@ var WorkItemStatView = Backbone.View.extend({
     },
 
     render: function () {
-        var data = this.model.get("Data");
-
-        var seriesData = new Array();
-        for (var i = 0; i < data.count() ; ++i) {
-            seriesData[i] = [data[i].Key, data[i].Count];
+        var ticksData = new Array();
+        var ticks = this.model.get("Ticks");
+        for (var i = 0; i < ticks.count() ; ++i) {
+            ticksData.push([i, ticks[i]]);
         }
 
-        $.plot(this.$el.selector, [seriesData], { series: { bars: { show: true, barWidth: 0.6, align: "center" } }, xaxis: { mode: "categories", tickLength: 0 } });
+        var seriesData = new Array();
+        var series = this.model.get("Series");
+        for (var i = 0; i < series.count() ; ++i) {
+            seriesData.push({ label: series[i].Label, data: [] });
+            for (var j = 0; j < series[i].Data.count() ; ++j) {
+                seriesData[i].data.push([j, series[i].Data[j]]);
+            }
+        }
+
+        $.plot(this.$el.selector, seriesData, { series: { stack: true, bars: { show: true, barWidth: 0.9, align: "center" } }, xaxis: { ticks: ticksData } });
         return this;
     },
 });

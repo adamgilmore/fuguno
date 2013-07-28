@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fuguno.Tfs", "Fuguno.Tfs\Fu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fuguno.UI.Console", "Fuguno.UI.Console\Fuguno.UI.Console.csproj", "{883B93B9-9520-46C6-AAB0-17E3FBCCE4F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fuguno.Services", "Fuguno.Services\Fuguno.Services.csproj", "{4B963EDA-1286-4029-A971-CD4183292B35}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fuguno.Web", "Fuguno.Services\Fuguno.Web.csproj", "{4B963EDA-1286-4029-A971-CD4183292B35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

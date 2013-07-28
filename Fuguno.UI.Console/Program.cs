@@ -22,6 +22,35 @@
 
             var areaPaths = tfsWorkItemStatsAreaPaths.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
+            var workItemStatsService = new WorkItemStatsService(tfsServerUri, tfsCollectionName);
+
+            // Get work item stats - active bugs by priority
+            Console.WriteLine("Active Bugs by Priority");
+            Console.WriteLine("=======================");
+            var activeBugsByPriority = workItemStatsService.GetWorkItemCountByPriority(tfsWorkItemStatsWorkItemType, tfsWorkItemStatsState, areaPaths);
+            for (var i = 0; i < activeBugsByPriority.Series[0].Data.Count; ++i)
+            {
+                Console.WriteLine("{0} {1}", activeBugsByPriority.Ticks[i], activeBugsByPriority.Series[0].Data[i]);
+            }
+
+            Console.WriteLine();
+
+            // Get work item stats - active bugs by assigned to 
+            Console.WriteLine("Active Bugs by Assignment");
+            Console.WriteLine("=========================");
+            var activeBugsByAssignedTo = workItemStatsService.GetWorkItemCountByAssignedTo(tfsWorkItemStatsWorkItemType, tfsWorkItemStatsState, areaPaths);
+            for (var i = 0; i < activeBugsByAssignedTo.Ticks.Count; ++i)
+            {
+                Console.Write(activeBugsByAssignedTo.Ticks[i] + " ");
+
+                foreach (var series in activeBugsByAssignedTo.Series)
+                {
+                    Console.Write(string.Format("{0}={1} ", series.Label, series.Data[i]));
+                }
+
+                Console.WriteLine();
+            }
+            
             // Get bug jail info
             var bugJailInfoService = new BugJailInfoService(tfsServerUri, tfsCollectionName);
 
@@ -31,28 +60,6 @@
             foreach (var bugJailInfo in bugJailInfos)
             {
                 Console.WriteLine("{0} {1}", bugJailInfo.Name, bugJailInfo.ImageUrl);
-            }
-
-            // Get work item stats - active bugs by assigned to 
-            var workItemStatsService = new WorkItemStatsService(tfsServerUri, tfsCollectionName);
-
-            Console.WriteLine("Active Bugs by Assignment");
-            Console.WriteLine("=========================");
-            var activeBugsByAssignedTo = workItemStatsService.GetWorkItemCountByAssignedTo(tfsWorkItemStatsWorkItemType, tfsWorkItemStatsState, areaPaths);
-            foreach (var assignedToBugs in activeBugsByAssignedTo.Data)
-            {
-                Console.WriteLine("{0} {1}", assignedToBugs.Key, assignedToBugs.Count);
-            }
-
-            Console.WriteLine();
-
-            // Get work item stats - active bugs by priority
-            Console.WriteLine("Active Bugs by Priority");
-            Console.WriteLine("=======================");
-            var activeBugsByPriority = workItemStatsService.GetWorkItemCountByPriority(tfsWorkItemStatsWorkItemType, tfsWorkItemStatsState, areaPaths);
-            foreach (var priorityBugs in activeBugsByPriority.Data)
-            {
-                Console.WriteLine("{0} {1}", priorityBugs.Key, priorityBugs.Count);
             }
 
             Console.WriteLine();

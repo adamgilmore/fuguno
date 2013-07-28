@@ -39,12 +39,27 @@
                 // run query
                 var workItemInfos = RunQuery(queryText.ToString());
 
-                // group results
                 var workItemStats = new WorkItemStats();
-                workItemStats.Data = workItemInfos
-                    .GroupBy(workItemInfo => workItemInfo.AssignedTo)
-                    .Select(list => new WorkItemStat() { Key = list.Key, Count = list.Count() })
-                    .OrderBy(stat => stat.Count);
+
+                // create a series for each distinct priority
+                var priorities = (from item in workItemInfos orderby item.Priority descending select item.Priority).Distinct().ToList();
+                foreach (var priority in priorities)
+                {
+                    workItemStats.Series.Add(new WorkItemStatsSeries() { Label = string.Format("P{0}", priority) });
+                }
+
+                // for each person, add the counts of each priority to the correct data series
+                List<string> people = (from item in workItemInfos orderby item.AssignedTo ascending select item.AssignedTo).Distinct().ToList();
+                for (var i = 0; i < people.Count; ++i)
+                {
+                    workItemStats.Ticks.Add(people[i]);
+
+
+                    for (var j = 0; j < priorities.Count; ++j )
+                    {
+                        workItemStats.Series[j].Data.Add((from item in workItemInfos where item.AssignedTo == people[i] && item.Priority == priorities[j] select item).Count());
+                    }
+                }
 
                 return workItemStats;
             }
@@ -70,10 +85,16 @@
 
                 // group results
                 var workItemStats = new WorkItemStats();
-                workItemStats.Data = workItemInfos
-                    .GroupBy(workItemInfo => workItemInfo.Priority)
-                    .Select(list => new WorkItemStat() { Key = list.Key.ToString(), Count = list.Count() })
-                    .OrderBy(stat => stat.Key);
+                var workItemStatsSeries = new WorkItemStatsSeries();
+
+                var priorities = (from item in workItemInfos orderby item.Priority ascending select item.Priority).Distinct();
+                foreach (var priority in priorities)
+                {
+                    workItemStats.Ticks.Add(string.Format("P{0}", priority));
+                    workItemStatsSeries.Data.Add((from item in workItemInfos where item.Priority == priority select item).Count());
+                }
+
+                workItemStats.Series.Add(workItemStatsSeries);
 
                 return workItemStats;
             }
