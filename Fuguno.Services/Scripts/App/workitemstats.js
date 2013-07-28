@@ -59,7 +59,23 @@ var WorkItemStatsView = Backbone.View.extend({
         }
 
         var placeholder = this.$el.children(".chart");
-        $.plot(placeholder, seriesData, { series: { stack: true, bars: { show: true, barWidth: 0.9, align: "center" } }, xaxis: { ticks: ticksData } });
+        $.plot(
+            placeholder,
+            seriesData, {
+                series: {
+                    stack: true,
+                    bars: {
+                            show: true,
+                            barWidth: 0.9, align: "center"
+                    }
+                },
+                xaxis: {
+                    ticks: ticksData
+                },
+                grid: {
+                    show: true
+                }
+            });
 
     },
 

@@ -7,19 +7,19 @@
 <div id="body">
     <script type="text/template" id="iterationInfoTemplate">
         <h2><%= formatString(Name, "-") %></h2>
-        <span><% print(EndDate.isBlank() ? "-" : Date.create(EndDate).daysFromNow()+1 + " days left") %></span>
+        <span><% print(EndDate.isBlank() ? "-" : moment().subtract("d", 1).from(EndDate, true) + "  left") %></span>
     </script>
 
     <script type="text/template" id="buildInfoTemplate">
         <li class="<%= Status %>">
-            <h2 id="Name"><%= Name %></h2>
+            <h2 id="Name"><%= Name %> <%= formatString(Status, "") %> </h2>
             <p><%= formatString(BuildNumber, "-") %></p>
-            <p><%= formatString(Status, "-") %></p>
+            <p></p>
             <p>Requested by <%= formatString(RequestedFor, "-") %></p>
-            <p>Started at <%= formatDate(StartTime, "-") %></p>
-            <p>Finished at <%= formatDate(FinishTime, "-") %></p>
-            <p>Elapsed <%= formatTime(ElapsedTime, "-") %></p>
-            <p>Test pass rate of <%= formatTestPassPercentage(TotalTestCount, TotalTestPassedCount, "-") %></p>
+            <p>Started <%= formatDate(StartTime, "-") %></p>
+            <p>Finished <%= formatDate(FinishTime, "-") %></p>
+            <p>Took <%= formatTime(ElapsedTime, "-") %></p>
+            <p><%= getTestPassPercentage(TotalTestCount, TotalTestPassedCount) == null ? "No test data" : "Test pass rate of " + formatTestPassPercentage(getTestPassPercentage(TotalTestCount, TotalTestPassedCount)) %></p>
         </li>
     </script>
 
@@ -38,6 +38,7 @@
             <div id="iterationInfo"></div>
         </div>
         <div id="main">
+            <h3>Builds</h3>
             <ul id="buildInfoList"></ul>
         </div>
         <div id="sidebar">
@@ -51,6 +52,7 @@
     <script src="~/Scripts/flot/jquery.flot.stack.js"></script>
     <script src="~/Scripts/underscore.js"></script>
     <script src="~/Scripts/backbone.js"></script>
+    <script src="~/Scripts/moment.js"></script>
     <script src="~/Scripts/sugar-full.development.js"></script>
     <script src="~/Scripts/App/buildinfo.js"></script>
     <script src="~/Scripts/App/iterationinfo.js"></script>
@@ -123,18 +125,23 @@
 
         function formatTime(str, placeholder) {
             if (_.isNull(str) || str.isBlank()) return placeholder;
-            return str;
+            return moment.duration(str).humanize();
         }
 
         function formatDate(date, placeholder) {
             if (_.isNull(date) || (_.isString(date) && date.isBlank())) return placeholder;
-            return Date.create(date).format();
+            return moment(date).fromNow();
         }
 
-        function formatTestPassPercentage(totalTestCount, totalTestPassedCount, placeholder) {
-            if (_.isNaN(totalTestCount) || _.isNaN(totalTestPassedCount)) return placeholder;
-            if (totalTestPassedCount == 0 || totalTestCount == 0) return placeholder;
-            return ((totalTestPassedCount / totalTestCount) * 100).round(2) + "%";
+        function formatTestPassPercentage(testPassPercentage) {
+            if (testPassPercentage == null) return "";
+            return testPassPercentage.round(0) + "%";
+        }
+
+        function getTestPassPercentage(totalTestCount, totalTestPassedCount) {
+            if (_.isNaN(totalTestCount) || _.isNaN(totalTestPassedCount)) return null;
+            if (totalTestPassedCount == 0 || totalTestCount == 0) return null;
+            return (totalTestPassedCount / totalTestCount) * 100;
         }
     </script>
 </div>
