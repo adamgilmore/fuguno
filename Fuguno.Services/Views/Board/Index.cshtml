@@ -7,7 +7,7 @@
 <div id="body">
     <script type="text/template" id="iterationInfoTemplate">
         <h2><%= formatString(Name, "-") %></h2>
-        <span><% print(EndDate.isBlank() ? "-" : Date.create(EndDate).daysFromNow() + " days left") %></span>
+        <span><% print(EndDate.isBlank() ? "-" : Date.create(EndDate).daysFromNow()+1 + " days left") %></span>
     </script>
 
     <script type="text/template" id="buildInfoTemplate">
@@ -23,6 +23,16 @@
         </li>
     </script>
 
+    <script type="text/template" id="workItemStatsTemplate_Narrow">
+        <h3><%= Heading %></h3>
+        <div class="chart narrowChart"></div>
+    </script>
+
+    <script type="text/template" id="workItemStatsTemplate_Wide">
+        <h3><%= Heading %></h3>
+        <div class="chart wideChart"></div>
+    </script>
+
     <div id="wrap">
         <div id="header">
             <div id="iterationInfo"></div>
@@ -31,10 +41,8 @@
             <ul id="buildInfoList"></ul>
         </div>
         <div id="sidebar">
-            <h3>Active bugs by priority</h3>
-            <div id="chart" class="chart"></div>
-            <h3>Active bugs by people</h3>
-            <div id="chart2" class="chart"></div>
+            <div id="chart1"></div>
+            <div id="chart2"></div>
         </div>
     </div>
 
@@ -71,10 +79,12 @@
             buildInfoListView.addItem(TfsConnectionName, "Cloud.Main.Daily");
             buildInfoListView.addItem(TfsConnectionName, "Cloud.Main.Manifest.Deployment.DevTest");
 
-            bugsByPriorityView = new WorkItemStatView({
-                el: $("#chart"),
-                model: new WorkItemStatModel({
+            bugsByPriorityView = new WorkItemStatsView({
+                templateId: "#workItemStatsTemplate_Narrow",
+                el: $("#chart1"),
+                model: new WorkItemStatsModel({
                     ConnectionName: TfsConnectionName,
+                    Heading: "Active bugs by priority",
                     Action: "priority",
                     WorkItemType: "Bug",
                     State: "Active",
@@ -82,10 +92,12 @@
                 })
             });
 
-            bugsByAssignedToView = new WorkItemStatView({
+            bugsByAssignedToView = new WorkItemStatsView({
+                templateId: "#workItemStatsTemplate_Wide",
                 el: $("#chart2"),
-                model: new WorkItemStatModel({
+                model: new WorkItemStatsModel({
                     ConnectionName: TfsConnectionName,
+                    Heading: "Active bugs by people",
                     Action: "assignedto",
                     WorkItemType: "Bug",
                     State: "Active",

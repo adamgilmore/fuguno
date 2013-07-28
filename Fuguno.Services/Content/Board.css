@@ -83,7 +83,12 @@ html {
     background-color:lightyellow;
 }
 
-.chart {
+.wideChart {
     width: 600px;
+    height: 300px;
+}
+
+.narrowChart {
+    width: 300px;
     height: 300px;
 }

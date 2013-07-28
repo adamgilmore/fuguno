@@ -52,7 +52,8 @@
                 List<string> people = (from item in workItemInfos orderby item.AssignedTo ascending select item.AssignedTo).Distinct().ToList();
                 for (var i = 0; i < people.Count; ++i)
                 {
-                    workItemStats.Ticks.Add(people[i]);
+                    var abbreviatedName = people[i].Split(' ').First();
+                    workItemStats.Ticks.Add(abbreviatedName);
 
 
                     for (var j = 0; j < priorities.Count; ++j )
