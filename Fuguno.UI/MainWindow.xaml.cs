@@ -1,5 +1,6 @@
 ﻿namespace Fuguno.UI
 {
+    using System.Configuration;
     using System.Windows;
 
     /// <summary>
@@ -14,7 +15,7 @@
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Browser.Navigate("http://www.microsoft.com");
+            Browser.Navigate(ConfigurationManager.AppSettings["Url"]);
         }
     }
 }
