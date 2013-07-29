@@ -2,6 +2,7 @@
 {
     using Microsoft.TeamFoundation.Build.Client;
 using Microsoft.TeamFoundation.Client;
+using Microsoft.TeamFoundation.ProcessConfiguration.Client;
 using Microsoft.TeamFoundation.Server;
 using Microsoft.TeamFoundation.TestManagement.Client;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
@@ -15,11 +16,18 @@ using System.Collections.Generic;
         private ITestManagementService _testManagementService;
         private ICommonStructureService4 _commonStructureService;
         private WorkItemStore _workItemStore;
+        private TfsTeamService _teamService;
+        private TeamSettingsConfigurationService _teamSettings;
 
         public TfsCollection(string tfsServerUri, string tfsCollectionName)
         {
             Uri tfsProjectCollectionUri = GetTfsProjectCollectionUri(tfsServerUri, tfsCollectionName);
             _tpc = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(tfsProjectCollectionUri);
+        }
+
+        public TfsTeamProjectCollection Collection
+        {
+            get { return _tpc; }
         }
 
         public IBuildServer BuildServer
@@ -40,6 +48,16 @@ using System.Collections.Generic;
         public WorkItemStore WorkItemStore
         {
             get { return GetService<WorkItemStore>(ref _workItemStore); }
+        }
+
+        public TfsTeamService TeamService
+        {
+            get { return GetService<TfsTeamService>(ref _teamService); }
+        }
+
+        public TeamSettingsConfigurationService TeamSettings
+        {
+            get { return GetService<TeamSettingsConfigurationService>(ref _teamSettings); }
         }
 
         private T GetService<T>(ref T prop)

@@ -14,20 +14,34 @@
             var tfsServerUri = ConfigurationManager.AppSettings["TfsServerUri"];
             var tfsCollectionName = ConfigurationManager.AppSettings["TfsCollectionName"];
             var tfsProjectName = ConfigurationManager.AppSettings["TfsProjectName"];
+            var tfsTeamName = ConfigurationManager.AppSettings["TfsTeamName"];
             var tfsRootIterationPath = ConfigurationManager.AppSettings["TfsRootIterationPath"];
             var tfsBuildDefinitonNames = ConfigurationManager.AppSettings["TfsBuildDefinitionNames"];
             var tfsWorkItemStatsWorkItemType = ConfigurationManager.AppSettings["TfsWorkItemStatsWorkItemType"];
             var tfsWorkItemStatsState = ConfigurationManager.AppSettings["TfsWorkItemStatsState"];
-            var tfsWorkItemStatsAreaPaths = ConfigurationManager.AppSettings["TfsWorkItemStatsAreaPaths"];
+            //var tfsWorkItemStatsAreaPaths = ConfigurationManager.AppSettings["TfsWorkItemStatsAreaPaths"];
 
-            var areaPaths = tfsWorkItemStatsAreaPaths.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            //var areaPaths = tfsWorkItemStatsAreaPaths.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
-            var workItemStatsService = new WorkItemStatsService(tfsServerUri, tfsCollectionName);
+            // Get bug jail info
+            //var bugJailInfoService = new BugJailInfoService(tfsServerUri, tfsCollectionName, tfsProjectName);
+
+            //Console.WriteLine("Bug Jail");
+            //Console.WriteLine("=========================");
+            //var bugJailInfos = bugJailInfoService.GetBugJail(areaPaths);
+            //foreach (var bugJailInfo in bugJailInfos)
+            //{
+            //    Console.WriteLine("{0} {1}", bugJailInfo.Name, bugJailInfo.ImageUrl);
+            //}
+
+            //Console.WriteLine();
 
             // Get work item stats - active bugs by priority
+            var workItemStatsService = new WorkItemStatsService(tfsServerUri, tfsCollectionName);
+
             Console.WriteLine("Active Bugs by Priority");
             Console.WriteLine("=======================");
-            var activeBugsByPriority = workItemStatsService.GetWorkItemCountByPriority(tfsWorkItemStatsWorkItemType, tfsWorkItemStatsState, areaPaths);
+            var activeBugsByPriority = workItemStatsService.GetWorkItemCountByPriority(tfsProjectName, tfsTeamName, tfsWorkItemStatsWorkItemType, tfsWorkItemStatsState);
             for (var i = 0; i < activeBugsByPriority.Series[0].Data.Count; ++i)
             {
                 Console.WriteLine("{0} {1}", activeBugsByPriority.Ticks[i], activeBugsByPriority.Series[0].Data[i]);
@@ -38,7 +52,7 @@
             // Get work item stats - active bugs by assigned to 
             Console.WriteLine("Active Bugs by Assignment");
             Console.WriteLine("=========================");
-            var activeBugsByAssignedTo = workItemStatsService.GetWorkItemCountByAssignedTo(tfsWorkItemStatsWorkItemType, tfsWorkItemStatsState, areaPaths);
+            var activeBugsByAssignedTo = workItemStatsService.GetWorkItemCountByAssignedTo(tfsProjectName, tfsTeamName, tfsWorkItemStatsWorkItemType, tfsWorkItemStatsState);
             for (var i = 0; i < activeBugsByAssignedTo.Ticks.Count; ++i)
             {
                 Console.Write(activeBugsByAssignedTo.Ticks[i] + " ");
@@ -51,19 +65,6 @@
                 Console.WriteLine();
             }
             
-            // Get bug jail info
-            var bugJailInfoService = new BugJailInfoService(tfsServerUri, tfsCollectionName);
-
-            Console.WriteLine("Bug Jail");
-            Console.WriteLine("=========================");
-            var bugJailInfos = bugJailInfoService.GetBugJail(areaPaths);
-            foreach (var bugJailInfo in bugJailInfos)
-            {
-                Console.WriteLine("{0} {1}", bugJailInfo.Name, bugJailInfo.ImageUrl);
-            }
-
-            Console.WriteLine();
-
             // Get iteration info - sprint and days remaining
             Console.WriteLine("Iteration info");
             Console.WriteLine("==============");

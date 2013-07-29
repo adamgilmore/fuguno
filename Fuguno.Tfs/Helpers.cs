@@ -1,6 +1,9 @@
 ﻿namespace Fuguno.Tfs
 {
+    using System.Collections.Generic;
     using System.Text;
+    using System.Linq;
+    using System;
 
     internal static class Helpers
     {
@@ -31,5 +34,24 @@
 
             return queryText.ToString();
         }
+
+        internal static string[] GetAreaPathsForTeam(TfsCollection collection, string projectName, string teamName)
+        {
+            var areaPaths = new List<string>();
+
+            var projectInfo = collection.CommonStructureService.GetProjectFromName(projectName);
+            var teams = collection.TeamService.QueryTeams(projectInfo.Uri);
+            var team = teams.Where(t => t.Name == teamName).First();
+            var teamConfiguration = collection.TeamSettings.GetTeamConfigurations(new Guid[] { team.Identity.TeamFoundationId }).First();
+            foreach (var teamFieldValue in teamConfiguration.TeamSettings.TeamFieldValues)
+            {
+                areaPaths.Add(teamFieldValue.Value);
+            }
+
+            return areaPaths.ToArray();
+        }
     }
+
+
 }
+

@@ -87,11 +87,12 @@
                     el: $("#chart1"),
                     model: new WorkItemStatsModel({
                         ConnectionName: TfsConnectionName,
+                        ProjectName: "ISS Media Platform",
+                        TeamName: "Content Infrastructure - UK",
                         Heading: "Active bugs by priority",
                         Action: "priority",
                         WorkItemType: "Bug",
-                        State: "Active",
-                        AreaPaths: "ISS Media Platform\\Cloud\\ContentInfrastructure\\Operator Portal platform, ISS Media Platform\\Cloud\\ContentInfrastructure\\Account Management, ISS Media Platform\\Cloud\\ContentInfrastructure\\Monetisation"
+                        State: "Active"
                     })
                 });
 
@@ -100,11 +101,12 @@
                     el: $("#chart2"),
                     model: new WorkItemStatsModel({
                         ConnectionName: TfsConnectionName,
+                        ProjectName: "ISS Media Platform",
+                        TeamName: "Content Infrastructure - UK",
                         Heading: "Active bugs by people",
                         Action: "assignedto",
                         WorkItemType: "Bug",
-                        State: "Active",
-                        AreaPaths: "ISS Media Platform\\Cloud\\ContentInfrastructure\\Operator Portal platform, ISS Media Platform\\Cloud\\ContentInfrastructure\\Account Management, ISS Media Platform\\Cloud\\ContentInfrastructure\\Monetisation"
+                        State: "Active"
                     })
                 });
 

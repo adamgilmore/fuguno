@@ -17,20 +17,21 @@
             FROM    WorkItems 
             WHERE   [System.WorkItemType] = '{0}'";
 
-        private WorkItemStore _workItemStore;
+        private TfsCollection _collection;
 
         public WorkItemStatsService(string tfsServerUri, string tfsCollectionName)
         {
-            var tfsCollection = new TfsCollection(tfsServerUri, tfsCollectionName);
-            _workItemStore = tfsCollection.WorkItemStore;
+            _collection = new TfsCollection(tfsServerUri, tfsCollectionName);
         }
 
-        public WorkItemStats GetWorkItemCountByAssignedTo(string workItemType, string state, string[] areaPaths)
+        public WorkItemStats GetWorkItemCountByAssignedTo(string projectName, string teamName, string workItemType, string state)
         {
             Trace.TraceInformation(string.Format("{0} -> GetWorkItemCountByAssignedTo", DateTime.Now));
 
             try
             {
+                var areaPaths = Helpers.GetAreaPathsForTeam(_collection, projectName, teamName);
+
                 // build query
                 var queryText = new StringBuilder(string.Format(WorkItemCountQueryTemplate, workItemType));
                 queryText.AppendFormat(" AND State = '{0}'", state);
@@ -70,12 +71,14 @@
             }
         }
 
-        public WorkItemStats GetWorkItemCountByPriority(string workItemType, string state, string[] areaPaths)
+        public WorkItemStats GetWorkItemCountByPriority(string projectName, string teamName, string workItemType, string state)
         {
             Trace.TraceInformation(string.Format("{0} -> GetWorkItemCountByPriority", DateTime.Now));
 
             try
             {
+                var areaPaths = Helpers.GetAreaPathsForTeam(_collection, projectName, teamName);
+
                 // build query
                 var queryText = new StringBuilder(string.Format(WorkItemCountQueryTemplate, workItemType));
                 queryText.AppendFormat(" AND State = '{0}'", state);
@@ -108,7 +111,7 @@
         private List<WorkItemInfo> RunQuery(string queryText)
         {
             var workItemInfos = new List<WorkItemInfo>();
-            var workItems = _workItemStore.Query(queryText.ToString());
+            var workItems = _collection.WorkItemStore.Query(queryText.ToString());
             foreach (WorkItem workItem in workItems)
             {
                 workItemInfos.Add(new WorkItemInfo()

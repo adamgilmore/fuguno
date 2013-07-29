@@ -3,11 +3,12 @@ var WorkItemStatsModel = Backbone.Model.extend({
     urlRoot: "api/workitemstats",
     defaults: {
         ConnectionName: "",
+        ProjectName: "",
+        TeamName: "",
         Heading: "",
         Action:"",
         WorkItemType: "", 
-        State: "", 
-        AreaPaths: ""
+        State: ""
     },
 
     url: function () {
@@ -15,7 +16,8 @@ var WorkItemStatsModel = Backbone.Model.extend({
             connectionName: this.get("ConnectionName"),
             workItemType: this.get("WorkItemType"),
             state: this.get("State"),
-            areaPaths: this.get("AreaPaths")
+            projectName: this.get("ProjectName"),
+            teamName: this.get("TeamName")
         }
 
         return this.urlRoot + "/" + this.get("Action") + "?" + $.param(params);

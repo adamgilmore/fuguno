@@ -5,7 +5,7 @@
 
     public interface IWorkItemStatsService
     {
-        WorkItemStats GetWorkItemCountByAssignedTo(string workItemType, string state, string[] areaPaths);
-        WorkItemStats GetWorkItemCountByPriority(string workItemType, string state, string[] areaPaths);
+        WorkItemStats GetWorkItemCountByAssignedTo(string projectName, string teamName, string workItemType, string state);
+        WorkItemStats GetWorkItemCountByPriority(string projectName, string teamName, string workItemType, string state);
     }
 }
