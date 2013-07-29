@@ -241,12 +241,13 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\HelpPageApiModel.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <None Include="Properties\PublishProfiles\BuildScreen.pubxml" />
+    <Content Include="Scripts\App\helpers.js" />
     <Content Include="Scripts\App\iterationinfo.js" />
     <Content Include="Scripts\App\workitemstats.js" />
     <Content Include="Scripts\backbone.js" />
     <Content Include="Scripts\backbone.min.js" />
     <Content Include="Scripts\App\buildinfo.js" />
+    <None Include="Properties\PublishProfiles\BuildBoard.pubxml" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Scripts\flot\excanvas.js" />
     <Content Include="Scripts\flot\excanvas.min.js" />
