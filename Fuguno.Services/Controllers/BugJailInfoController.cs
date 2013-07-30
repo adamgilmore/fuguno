@@ -7,9 +7,9 @@
 
     public class BugJailInfoController : ApiController
     {
-        public IEnumerable<BugJailInfo> GetAll(string connectionName, string teamName)
+        public IEnumerable<BugJailInfo> GetAll(string teamName)
         {
-            var parameterMap = Helpers.GetConnectionParameters(connectionName);
+            var parameterMap = Helpers.GetConnectionParameters();
 
             var userImageUrlTemplate = ConfigurationManager.AppSettings["UserImageUrlTemplate"];
 

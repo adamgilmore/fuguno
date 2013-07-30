@@ -2,21 +2,10 @@
 var IterationInfoModel = Backbone.Model.extend({
     urlRoot: "api/iterationinfo",
     defaults: {
-        ConnectionName: "",
         Name: "",
-        Path: "",
         StartDate: "",
         EndDate: ""
     },
-
-    url: function () {
-        var params = {
-            connectionName: this.get("ConnectionName"),
-            rootIterationPath: this.get("Path")
-        }
-
-        return this.urlRoot + "?" + $.param(params);
-    }
 });
 
 // View

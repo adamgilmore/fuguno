@@ -6,9 +6,9 @@
 
     internal static class Helpers
     {
-        internal static Dictionary<string, string> GetConnectionParameters(string connectionName)
+        internal static Dictionary<string, string> GetConnectionParameters()
         {
-            var connectionString = ConfigurationManager.ConnectionStrings[connectionName].ConnectionString;
+            var connectionString = ConfigurationManager.ConnectionStrings["ottstfs"].ConnectionString;
             var connectionParameters = connectionString.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             Dictionary<string, string> parameterMap = new Dictionary<string, string>();
             foreach (var connectionParameter in connectionParameters)

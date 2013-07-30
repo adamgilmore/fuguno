@@ -27,14 +27,10 @@ var BugJailInfoView = Backbone.View.extend({
 var BugJailInfoList = Backbone.Collection.extend({
     model: BugJailInfoModel,
     initialize: function (models, options) {
-        this.ConnectionName = options.ConnectionName;
-        this.ProjectName = options.ProjectName;
         this.TeamName = options.TeamName;
     },
     url: function () {
         var params = {
-            connectionName: this.ConnectionName,
-            projectName: this.ProjectName,
             teamName: this.TeamName
         }
 
@@ -52,8 +48,6 @@ var BugJailInfoListView = Backbone.View.extend({
 
         // Create a collection and bind the "appendItem" function to the "add" event of the collection
         this.collection = new BugJailInfoList([], {
-            ConnectionName: this.options.ConnectionName,
-            ProjectName: this.options.ProjectName,
             TeamName: this.options.TeamName
         });
 

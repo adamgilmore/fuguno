@@ -2,7 +2,6 @@
 var BuildInfoModel = Backbone.Model.extend({
     urlRoot: "api/buildinfo",
     defaults: {
-        ConnectionName: "",
         Name: "",
         BuildNumber: "",
         Status: "",
@@ -20,7 +19,6 @@ var BuildInfoModel = Backbone.Model.extend({
 
     url: function () {
         var params = { 
-            connectionName: this.get("ConnectionName"), 
             buildDefinitionName: this.get("Name") 
         }
 
@@ -74,9 +72,8 @@ var BuildInfoListView = Backbone.View.extend({
     },
 
     // adds a new model to the collection - which triggers the "add" event on the collection which is bound to the "appendItem" method
-    addItem: function (connectionName, name) {
+    addItem: function (name) {
         var item = new BuildInfoModel();
-        item.set("ConnectionName", connectionName);
         item.set("Name", name);
         this.collection.add(item);
     },
