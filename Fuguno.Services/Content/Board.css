@@ -95,3 +95,16 @@ html {
     width: 50%;
     height: 200px;
 }
+
+#bugJailInfoList {
+     float:left; 
+     width:100%; 
+}
+#bugJailInfoList div {
+    float:left; 
+}
+
+#bugJailInfoList div img {
+    width: 75px;
+    height: 75px;
+}

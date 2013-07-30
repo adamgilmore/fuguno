@@ -17,6 +17,10 @@
     <span></span>
 </script>
 
+<script type="text/template" id="bugJailInfoTemplate">
+    <img src="<%= ImageUrl %>" />
+</script>
+
 <script type="text/template" id="buildInfoTemplate">
     <li class="<%= Status %>">
         <h2 id="Name"><%= Name %> <%= formatString(Status, "") %> </h2>
@@ -54,6 +58,7 @@
 <script src="~/Scripts/App/helpers.js"></script>
 <script src="~/Scripts/App/buildinfo.js"></script>
 <script src="~/Scripts/App/iterationinfo.js"></script>
+<script src="~/Scripts/App/bugjailinfo.js"></script>
 <script src="~/Scripts/App/workitemstats.js"></script>
 
 <div id="body">
@@ -65,6 +70,8 @@
             <div id="chart1"></div>
             <div id="chart2"></div>
             <div id="chart3"></div>
+            <h3>Bug Jail</h3>
+            <div id="bugJailInfoList"></div>
         </div>
         <div id="sidebar">
             <h3>Builds</h3>
@@ -75,6 +82,7 @@
     <script>
         $(function() {
             var iterationInfoView;
+            var bugJailInfoListView;
             var buildInfoListView;
             var bugsByPriorityView;
             var activeBugsByAssignedToView;
@@ -86,6 +94,13 @@
                 iterationInfoView = new IterationInfoView({
                     el: $("#iterationInfo"),
                     model: new IterationInfoModel({ ConnectionName: TfsConnectionName, Path: TfsRootIterationPath})
+                });
+
+                bugJailInfoListView = new BugJailInfoListView({
+                    el: $("#bugJailInfoList"),
+                    ConnectionName: TfsConnectionName,
+                    ProjectName: TfsProjectName,
+                    TeamName: TfsTeamName
                 });
 
                 buildInfoListView = new BuildInfoListView({ el: $("#buildInfoList") });
@@ -141,6 +156,7 @@
 
             function refreshPage() {
                 iterationInfoView.model.fetch();
+                bugJailInfoListView.fetchCollection();
                 buildInfoListView.fetchModels();
                 bugsByPriorityView.model.fetch();
                 activeBugsByAssignedToView.model.fetch();

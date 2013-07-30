@@ -56,7 +56,7 @@
         }
 
 
-        private static TeamConfiguration GetTeamConfiguration(TfsCollection collection, string projectName, string teamName)
+        internal static TeamConfiguration GetTeamConfiguration(TfsCollection collection, string projectName, string teamName)
         {
             var projectInfo = collection.CommonStructureService.GetProjectFromName(projectName);
             var teams = collection.TeamService.QueryTeams(projectInfo.Uri);

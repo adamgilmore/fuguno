@@ -19,22 +19,20 @@
             var tfsBuildDefinitonNames = ConfigurationManager.AppSettings["TfsBuildDefinitionNames"];
             var tfsWorkItemStatsWorkItemType = ConfigurationManager.AppSettings["TfsWorkItemStatsWorkItemType"];
             var tfsWorkItemStatsState = ConfigurationManager.AppSettings["TfsWorkItemStatsState"];
-            //var tfsWorkItemStatsAreaPaths = ConfigurationManager.AppSettings["TfsWorkItemStatsAreaPaths"];
-
-            //var areaPaths = tfsWorkItemStatsAreaPaths.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            var userImageUrlTemplate = ConfigurationManager.AppSettings["UserImageUrlTemplate"];
 
             // Get bug jail info
-            //var bugJailInfoService = new BugJailInfoService(tfsServerUri, tfsCollectionName, tfsProjectName);
+            var bugJailInfoService = new BugJailInfoService(tfsServerUri, tfsCollectionName, tfsProjectName, tfsTeamName, userImageUrlTemplate);
 
-            //Console.WriteLine("Bug Jail");
-            //Console.WriteLine("=========================");
-            //var bugJailInfos = bugJailInfoService.GetBugJail(areaPaths);
-            //foreach (var bugJailInfo in bugJailInfos)
-            //{
-            //    Console.WriteLine("{0} {1}", bugJailInfo.Name, bugJailInfo.ImageUrl);
-            //}
+            Console.WriteLine("Bug Jail");
+            Console.WriteLine("=========================");
+            var bugJailInfos = bugJailInfoService.WhoIsInJail();
+            foreach (var bugJailInfo in bugJailInfos)
+            {
+                Console.WriteLine("{0} {1}", bugJailInfo.Name, bugJailInfo.ImageUrl);
+            }
 
-            //Console.WriteLine();
+            Console.WriteLine();
 
             // Get work item stats - active bugs by priority
             var workItemStatsService = new WorkItemStatsService(tfsServerUri, tfsCollectionName);

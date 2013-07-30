@@ -4,6 +4,6 @@
 
     public interface IBugJailInfoService
     {
-        IEnumerable<BugJailInfo> GetBugJail(string[] areaPaths);
+        IEnumerable<BugJailInfo> WhoIsInJail();
     }
 }

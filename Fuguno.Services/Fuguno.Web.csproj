@@ -162,6 +162,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\BoardController.cs" />
     <Compile Include="Controllers\BuildInfoController.cs" />
+    <Compile Include="Controllers\BugJailInfoController.cs" />
     <Compile Include="Controllers\Helpers.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IterationInfoController.cs" />
@@ -241,6 +242,7 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\HelpPageApiModel.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="Scripts\App\bugjailinfo.js" />
     <Content Include="Scripts\App\helpers.js" />
     <Content Include="Scripts\App\iterationinfo.js" />
     <Content Include="Scripts\App\workitemstats.js" />
