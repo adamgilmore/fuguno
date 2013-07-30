@@ -60,7 +60,7 @@ var WorkItemStatsView = Backbone.View.extend({
             }
         }
 
-        var placeholder = this.$el.children(".chart");
+        var placeholder = this.$el.find(".chart");
         $.plot(
             placeholder,
             seriesData, {
@@ -73,6 +73,9 @@ var WorkItemStatsView = Backbone.View.extend({
                 },
                 xaxis: {
                     ticks: ticksData
+                },
+                yaxis: {
+                    tickDecimals: 0
                 },
                 grid: {
                     show: true

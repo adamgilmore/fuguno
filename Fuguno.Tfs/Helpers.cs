@@ -4,6 +4,7 @@
     using System.Text;
     using System.Linq;
     using System;
+    using Microsoft.TeamFoundation.ProcessConfiguration.Client;
 
     internal static class Helpers
     {
@@ -39,16 +40,29 @@
         {
             var areaPaths = new List<string>();
 
-            var projectInfo = collection.CommonStructureService.GetProjectFromName(projectName);
-            var teams = collection.TeamService.QueryTeams(projectInfo.Uri);
-            var team = teams.Where(t => t.Name == teamName).First();
-            var teamConfiguration = collection.TeamSettings.GetTeamConfigurations(new Guid[] { team.Identity.TeamFoundationId }).First();
+            var teamConfiguration = GetTeamConfiguration(collection, projectName, teamName);
             foreach (var teamFieldValue in teamConfiguration.TeamSettings.TeamFieldValues)
             {
                 areaPaths.Add(teamFieldValue.Value);
             }
 
             return areaPaths.ToArray();
+        }
+
+        internal static string GetCurrentIterationPathForTeam(TfsCollection collection, string projectName, string teamName)
+        {
+            var teamConfiguration = GetTeamConfiguration(collection, projectName, teamName);
+            return teamConfiguration.TeamSettings.CurrentIterationPath;
+        }
+
+
+        private static TeamConfiguration GetTeamConfiguration(TfsCollection collection, string projectName, string teamName)
+        {
+            var projectInfo = collection.CommonStructureService.GetProjectFromName(projectName);
+            var teams = collection.TeamService.QueryTeams(projectInfo.Uri);
+            var team = teams.Where(t => t.Name == teamName).First();
+            var teamConfiguration = collection.TeamSettings.GetTeamConfigurations(new Guid[] { team.Identity.TeamFoundationId }).First();
+            return teamConfiguration;
         }
     }
 
