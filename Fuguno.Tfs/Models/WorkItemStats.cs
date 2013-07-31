@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Fuguno.Tfs
+﻿namespace Fuguno.Tfs.Models
 {
+    using System.Collections.Generic;
+
     public class WorkItemStats
     {
         private List<WorkItemStatsSeries> _series = new List<WorkItemStatsSeries>();

@@ -1,5 +1,6 @@
-﻿namespace Fuguno.Tfs
+﻿namespace Fuguno.Tfs.Services
 {
+    using Fuguno.Tfs.Models;
     using Microsoft.TeamFoundation.Client;
     using Microsoft.TeamFoundation.Framework.Client;
     using Microsoft.TeamFoundation.Framework.Common;
@@ -11,7 +12,7 @@
     using System.Linq;
     using System.Text;
 
-    public class BugJailInfoService : IBugJailInfoService
+    public class BugJailInfoService
     {
         private const string BugJailInfoQueryTemplate = @"
             SELECT  [System.Id], 

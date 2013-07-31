@@ -1,12 +1,13 @@
-﻿namespace Fuguno.Tfs
+﻿namespace Fuguno.Tfs.Services
 {
+    using Fuguno.Tfs.Models;
     using Microsoft.TeamFoundation.Build.Client;
     using Microsoft.TeamFoundation.TestManagement.Client;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
 
-    public class BuildInfoService : IBuildInfoService
+    public class BuildInfoService
     {
         private string _tfsProjectName;
 

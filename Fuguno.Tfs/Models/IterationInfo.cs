@@ -1,4 +1,4 @@
-﻿namespace Fuguno.Tfs
+﻿namespace Fuguno.Tfs.Models
 {
     using System;
 

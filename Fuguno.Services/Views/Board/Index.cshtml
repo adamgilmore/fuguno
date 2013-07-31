@@ -4,7 +4,8 @@
 }
 
 <script>
-    var TfsTeamName = "Da Playas";
+    var TfsTeamNames = ["Content Infrastructure - UK", "Content Infrastructure - Metadata", "Ingest"]
+    var TfsTeamName = "Content Infrastructure - UK";
     var TfsBuildDefitionNames = ["Cloud.Main.GC2", "Cloud.Main.Rolling", "Cloud.Main.CI", "Cloud.Main.Daily", "Cloud.Main.Manifest.Deployment.DevTest"];
 </script>
 
@@ -64,11 +65,13 @@
             <div id="iterationInfo"></div>
         </div>
         <div id="main">
+            <div>
+                <h3>Bug Jail - active bugs</h3>
+                <div id="bugJailInfoList"></div>
+            </div>
             <div id="chart1"></div>
             <div id="chart2"></div>
             <div id="chart3"></div>
-            <h3>Bug Jail - active bugs</h3>
-            <div id="bugJailInfoList"></div>
         </div>
         <div id="sidebar">
             <h3>Builds</h3>

@@ -1,5 +1,4 @@
-﻿
-namespace Fuguno.Tfs
+﻿namespace Fuguno.Tfs.Models
 {
     public class TestRunInfo
     {

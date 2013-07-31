@@ -1,5 +1,6 @@
-﻿namespace Fuguno.Tfs
+﻿namespace Fuguno.Tfs.Services
 {
+    using Fuguno.Tfs.Models;
     using Microsoft.TeamFoundation.WorkItemTracking.Client;
     using System;
     using System.Collections.Generic;
@@ -7,7 +8,7 @@
     using System.Linq;
     using System.Text;
 
-    public class WorkItemStatsService : IWorkItemStatsService
+    public class WorkItemStatsService
     {
         private const string WorkItemCountQueryTemplate = @"
             SELECT  [System.Id], 

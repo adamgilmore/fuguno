@@ -1,6 +1,8 @@
 ﻿namespace Fuguno.Services.Controllers
 {
     using Fuguno.Tfs;
+    using Fuguno.Tfs.Models;
+    using Fuguno.Tfs.Services;
     using System.Configuration;
     using System.Web.Http;
 

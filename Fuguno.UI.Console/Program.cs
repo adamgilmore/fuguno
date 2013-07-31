@@ -5,6 +5,7 @@
     using System.Threading;
     using System;
     using System.Collections.Generic;
+    using Fuguno.Tfs.Services;
 
     class Program
     {
@@ -21,11 +22,22 @@
             var tfsWorkItemStatsState = ConfigurationManager.AppSettings["TfsWorkItemStatsState"];
             var userImageUrlTemplate = ConfigurationManager.AppSettings["UserImageUrlTemplate"];
 
+            // Get team names
+            var configService = new ConfigService(tfsServerUri, tfsCollectionName, tfsProjectName);
+
+            Console.WriteLine("Team Names");
+            Console.WriteLine("==========");
+            var teamNames = configService.GetTeamNames();
+            foreach (var teamName in teamNames)
+            {
+                Console.WriteLine(teamName);
+            }
+
             // Get bug jail info
             var bugJailInfoService = new BugJailInfoService(tfsServerUri, tfsCollectionName, tfsProjectName, tfsTeamName, userImageUrlTemplate);
 
             Console.WriteLine("Bug Jail");
-            Console.WriteLine("=========================");
+            Console.WriteLine("========");
             var bugJailInfos = bugJailInfoService.WhoIsInJail();
             foreach (var bugJailInfo in bugJailInfos)
             {

@@ -5,6 +5,7 @@
     using System.Linq;
     using System;
     using Microsoft.TeamFoundation.ProcessConfiguration.Client;
+    using Microsoft.TeamFoundation.Client;
 
     internal static class Helpers
     {
@@ -58,11 +59,17 @@
 
         internal static TeamConfiguration GetTeamConfiguration(TfsCollection collection, string projectName, string teamName)
         {
-            var projectInfo = collection.CommonStructureService.GetProjectFromName(projectName);
-            var teams = collection.TeamService.QueryTeams(projectInfo.Uri);
+            var teams = GetTeams(collection, projectName);
             var team = teams.Where(t => t.Name == teamName).First();
             var teamConfiguration = collection.TeamSettings.GetTeamConfigurations(new Guid[] { team.Identity.TeamFoundationId }).First();
             return teamConfiguration;
+        }
+
+        internal static IEnumerable<TeamFoundationTeam> GetTeams(TfsCollection collection, string projectName)
+        {
+            var projectInfo = collection.CommonStructureService.GetProjectFromName(projectName);
+            var teams = collection.TeamService.QueryTeams(projectInfo.Uri);
+            return teams;
         }
     }
 

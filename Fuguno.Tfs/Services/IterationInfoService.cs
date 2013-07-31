@@ -1,5 +1,6 @@
-﻿namespace Fuguno.Tfs
+﻿namespace Fuguno.Tfs.Services
 {
+    using Fuguno.Tfs.Models;
     using Microsoft.TeamFoundation.Server;
     using System;
     using System.Collections.Generic;
@@ -7,7 +8,7 @@
     using System.Linq;
     using System.Xml;
 
-    public class IterationInfoService : IIterationInfoService
+    public class IterationInfoService
     {
         string _tfsProjectName;
         string _tfsRootIterationPath;

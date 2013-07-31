@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Fuguno.Tfs
+﻿namespace Fuguno.Tfs.Models
 {
     internal class WorkItemInfo
     {
