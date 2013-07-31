@@ -1,4 +1,4 @@
-﻿namespace Fuguno.Services.Controllers
+﻿namespace Fuguno.Services.Controllers.Api
 {
     using Fuguno.Tfs;
     using Fuguno.Tfs.Models;

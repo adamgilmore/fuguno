@@ -1,0 +1,23 @@
+﻿@{
+    Layout = "..\\Shared\\_BoardLayout.cshtml";
+    ViewBag.Title = "Index";
+}
+
+<h2>Board Config</h2>
+
+<script src="~/Scripts/jquery-2.0.3.js"></script>
+<script src="~/Scripts/underscore.js"></script>
+
+<div id="body">
+
+    <script>
+        $(function () {
+            $.ajax({
+                url: "api/boardconfig/teamnames"
+            }).done(function (teamNames) {
+                alert(teamNames);
+            });
+        })
+    </script>
+</div>
+

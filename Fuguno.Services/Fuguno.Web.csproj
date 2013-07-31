@@ -161,11 +161,13 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\BoardController.cs" />
-    <Compile Include="Controllers\BuildInfoController.cs" />
-    <Compile Include="Controllers\BugJailInfoController.cs" />
+    <Compile Include="Controllers\Api\BuildInfoController.cs" />
+    <Compile Include="Controllers\Api\BugJailInfoController.cs" />
+    <Compile Include="Controllers\BoardConfigController.cs" />
+    <Compile Include="Controllers\Api\BoardConfigController.cs" />
     <Compile Include="Controllers\Helpers.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\IterationInfoController.cs" />
+    <Compile Include="Controllers\Api\IterationInfoController.cs" />
     <Compile Include="Controllers\WorkItemStatsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -338,7 +340,8 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Board\Index.cshtml" />
-    <Content Include="Views\Board\_Layout.cshtml" />
+    <Content Include="Views\Shared\_BoardLayout.cshtml" />
+    <Content Include="Views\BoardConfig\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
