@@ -3,21 +3,44 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Board Config</h2>
-
-<script src="~/Scripts/jquery-2.0.3.js"></script>
-<script src="~/Scripts/underscore.js"></script>
+<script type="text/template" id="teamNamesTemplate">
+    <option <% if (selected == true) print('selected');%> ><%= name %></option>
+</script>
 
 <div id="body">
+    <h1>Board Config</h1>
+    <div>
+        <select id="teamNames"></select>
+    </div>
+    <div>
+        <button id="save">Save</button>
+    </div>
+
+    <script src="~/Scripts/jquery-2.0.3.js"></script>
+    <script src="~/Scripts/underscore.js"></script>
+    <script src="~/Scripts/jquery.storageapi.js"></script>
+    <script src="~/Scripts/App/boardconfig.js"></script>
 
     <script>
         $(function () {
+            $("#save").click(function () {
+                var teamNames = [];
+                $("#teamNames option:selected").each(function () {
+                    teamNames.push($(this).text());
+                });
+
+                storeTeamNames(teamNames);
+            });
+
             $.ajax({
                 url: "api/boardconfig/teamnames"
             }).done(function (teamNames) {
-                alert(teamNames);
+                bindTeamNamesToTemplate(teamNames, "#teamNamesTemplate", "#teamNames");
             });
         })
     </script>
 </div>
+
+
+
 

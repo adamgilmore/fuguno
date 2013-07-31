@@ -4,13 +4,12 @@
 }
 
 <script>
-    var TfsTeamNames = ["Content Infrastructure - UK", "Content Infrastructure - Metadata", "Ingest"]
-    var TfsTeamName = "Content Infrastructure - UK";
+    var teamNames;
     var TfsBuildDefitionNames = ["Cloud.Main.GC2", "Cloud.Main.Rolling", "Cloud.Main.CI", "Cloud.Main.Daily", "Cloud.Main.Manifest.Deployment.DevTest"];
 </script>
 
 <script type="text/template" id="iterationInfoTemplate">
-    <h1><%= TfsTeamName %> <%= formatString(Name, "-") %> <% print(EndDate.isBlank() ? "-" : moment().subtract("d", 1).from(EndDate, true) + "  left") %></h1>
+    <h1><%= teamNames %> <%= formatString(Name, "-") %> <% print(EndDate.isBlank() ? "-" : moment().subtract("d", 1).from(EndDate, true) + "  left") %></h1>
     <span> </span>
     <span></span>
 </script>
@@ -53,11 +52,13 @@
 <script src="~/Scripts/backbone.js"></script>
 <script src="~/Scripts/moment.js"></script>
 <script src="~/Scripts/sugar-full.development.js"></script>
+<script src="~/Scripts/jquery.storageapi.js"></script>
 <script src="~/Scripts/App/helpers.js"></script>
 <script src="~/Scripts/App/buildinfo.js"></script>
 <script src="~/Scripts/App/iterationinfo.js"></script>
 <script src="~/Scripts/App/bugjailinfo.js"></script>
 <script src="~/Scripts/App/workitemstats.js"></script>
+<script src="~/Scripts/App/boardconfig.js"></script>
 
 <div id="body">
     <div id="wrap">
@@ -88,6 +89,13 @@
             var activeBugsByAssignedToView;
             var resolvedBugsByAssignedToView;
 
+            if (isBoardConfigured() == false) {
+                alert("Need to set config");
+                return;
+            }
+
+            teamNames = retrieveTeamNames();
+
             loadPage();
 
             function loadPage() {
@@ -98,7 +106,7 @@
 
                 bugJailInfoListView = new BugJailInfoListView({
                     el: $("#bugJailInfoList"),
-                    TeamName: TfsTeamName
+                    TeamName: teamNames
                 });
 
                 buildInfoListView = new BuildInfoListView({ el: $("#buildInfoList") });
@@ -110,7 +118,7 @@
                     templateId: "#workItemStatsTemplate_Narrow",
                     el: $("#chart1"),
                     model: new WorkItemStatsModel({
-                        TeamName: TfsTeamName,
+                        TeamName: teamNames,
                         Heading: "Active bugs by priority",
                         Action: "priority",
                         WorkItemType: "Bug",
@@ -122,7 +130,7 @@
                     templateId: "#workItemStatsTemplate_Wide",
                     el: $("#chart2"),
                     model: new WorkItemStatsModel({
-                        TeamName: TfsTeamName,
+                        TeamName: teamNames,
                         Heading: "Active bugs by people",
                         Action: "assignedto",
                         WorkItemType: "Bug",
@@ -134,7 +142,7 @@
                     templateId: "#workItemStatsTemplate_Wide",
                     el: $("#chart3"),
                     model: new WorkItemStatsModel({
-                        TeamName: TfsTeamName,
+                        TeamName: teamNames,
                         Heading: "Resolved bugs by people",
                         Action: "assignedto",
                         WorkItemType: "Bug",

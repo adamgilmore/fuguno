@@ -23,3 +23,4 @@ function getTestPassPercentage(totalTestCount, totalTestPassedCount) {
     if (totalTestPassedCount == 0 || totalTestCount == 0) return null;
     return (totalTestPassedCount / totalTestCount) * 100;
 }
+
