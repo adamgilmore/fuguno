@@ -1,17 +1,17 @@
-﻿function isBoardConfigured() {
-    return $.localStorage.isSet("teamNames");
+﻿var LocalStorageKey_TeamNames = "teamNames";
+var LocalStorageKey_BuildDefinitionNames = "buildDefinitionNames";
+
+function isBoardConfigured() {
+    return $.localStorage.isSet(LocalStorageKey_TeamNames);
 }
 
-function storeTeamNames(teamNames) {
-    $.localStorage.set("teamNames", teamNames);
+function getBoardConfigSetting(localStorageKey) {
+    var setting = $.localStorage.get(localStorageKey);
+    return setting;
 }
 
-function retrieveTeamNames() {
-    return [$.localStorage.get("teamNames")];
-}
-
-function bindTeamNamesToTemplate(list, templateSelector, el) {
-    var selectedItems = retrieveTeamNames();
+function bindListToTemplate(list, templateSelector, el, localStorageKey) {
+    var selectedItems = getBoardConfigSetting(localStorageKey).split(",");
 
     _.each(list, function (item) {
         var compiled = _.template($(templateSelector).html());
@@ -20,4 +20,13 @@ function bindTeamNamesToTemplate(list, templateSelector, el) {
         var element = $(el);
         element.append(html);
     });
+}
+
+function storeSelectedListItems(el, localStorageKey) {
+    var list = [];
+    $(el + " option:selected").each(function () {
+        list.push($(this).text());
+    });
+
+    $.localStorage.set(localStorageKey, list);
 }

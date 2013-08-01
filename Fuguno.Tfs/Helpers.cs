@@ -56,7 +56,6 @@
             return teamConfiguration.TeamSettings.CurrentIterationPath;
         }
 
-
         internal static TeamConfiguration GetTeamConfiguration(TfsCollection collection, string projectName, string teamName)
         {
             var teams = GetTeams(collection, projectName);

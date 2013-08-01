@@ -22,8 +22,20 @@
             var tfsWorkItemStatsState = ConfigurationManager.AppSettings["TfsWorkItemStatsState"];
             var userImageUrlTemplate = ConfigurationManager.AppSettings["UserImageUrlTemplate"];
 
-            // Get team names
+            // Get build definitions
             var configService = new ConfigService(tfsServerUri, tfsCollectionName, tfsProjectName);
+
+            Console.WriteLine("Build Definitions");
+            Console.WriteLine("=================");
+            var buildDefinitionNames = configService.GetBuildDefinitionNames();
+            foreach (var buildDefinitionName in buildDefinitionNames)
+            {
+                Console.WriteLine(buildDefinitionName);
+            }
+
+            Console.WriteLine();
+
+            // Get team names
 
             Console.WriteLine("Team Names");
             Console.WriteLine("==========");

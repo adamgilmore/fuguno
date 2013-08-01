@@ -16,17 +16,32 @@
 
         public IEnumerable<string> GetTeamNames()
         {
-            var teamNames = new List<string>();
+            var names = new List<string>();
 
             var teams = Helpers.GetTeams(_collection, _tfsProjectName);
             foreach (var team in teams)
             {
-                teamNames.Add(team.Name);
+                names.Add(team.Name);
             }
 
-            teamNames.Sort();
+            names.Sort();
 
-            return teamNames;
+            return names;
+        }
+
+        public IEnumerable<string> GetBuildDefinitionNames()
+        {
+            var names = new List<string>();
+
+            var buildDefinitions = _collection.BuildServer.QueryBuildDefinitions(_tfsProjectName);
+            foreach (var buildDefinition in buildDefinitions)
+            {
+                names.Add(buildDefinition.Name);
+            }
+
+            names.Sort();
+
+            return names;
         }
     }
 }

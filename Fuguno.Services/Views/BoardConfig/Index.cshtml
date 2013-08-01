@@ -3,14 +3,19 @@
     ViewBag.Title = "Index";
 }
 
-<script type="text/template" id="teamNamesTemplate">
+<script type="text/template" id="listItemTemplate">
     <option <% if (selected == true) print('selected');%> ><%= name %></option>
 </script>
 
 <div id="body">
     <h1>Board Config</h1>
     <div>
+        <h2>Team</h2>
         <select id="teamNames"></select>
+    </div>
+    <div>
+        <h2>Build Definitions</h2>
+        <select id="buildDefinitionNames" multiple></select>
     </div>
     <div>
         <button id="save">Save</button>
@@ -24,19 +29,22 @@
     <script>
         $(function () {
             $("#save").click(function () {
-                var teamNames = [];
-                $("#teamNames option:selected").each(function () {
-                    teamNames.push($(this).text());
-                });
-
-                storeTeamNames(teamNames);
+                storeSelectedListItems("#teamNames", LocalStorageKey_TeamNames);
+                storeSelectedListItems("#buildDefinitionNames", LocalStorageKey_BuildDefinitionNames);
             });
 
             $.ajax({
                 url: "api/boardconfig/teamnames"
-            }).done(function (teamNames) {
-                bindTeamNamesToTemplate(teamNames, "#teamNamesTemplate", "#teamNames");
+            }).done(function (list) {
+                bindListToTemplate(list, "#listItemTemplate", "#teamNames", LocalStorageKey_TeamNames);
             });
+
+            $.ajax({
+                url: "api/boardconfig/builddefinitionnames"
+            }).done(function (list) {
+                bindListToTemplate(list, "#listItemTemplate", "#buildDefinitionNames", LocalStorageKey_BuildDefinitionNames);
+            });
+
         })
     </script>
 </div>

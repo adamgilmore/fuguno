@@ -5,7 +5,7 @@
 
 <script>
     var teamNames;
-    var TfsBuildDefitionNames = ["Cloud.Main.GC2", "Cloud.Main.Rolling", "Cloud.Main.CI", "Cloud.Main.Daily", "Cloud.Main.Manifest.Deployment.DevTest"];
+    var buildDefinitionNames;
 </script>
 
 <script type="text/template" id="iterationInfoTemplate">
@@ -94,7 +94,8 @@
                 return;
             }
 
-            teamNames = retrieveTeamNames();
+            teamNames = getBoardConfigSetting(LocalStorageKey_TeamNames).split(",");
+            buildDefinitionNames = getBoardConfigSetting(LocalStorageKey_BuildDefinitionNames).split(",");
 
             loadPage();
 
@@ -110,7 +111,7 @@
                 });
 
                 buildInfoListView = new BuildInfoListView({ el: $("#buildInfoList") });
-                _.each(TfsBuildDefitionNames, function (name) {
+                _.each(buildDefinitionNames, function (name) {
                     buildInfoListView.addItem(name);
                 });
 

@@ -109,5 +109,6 @@ html {
     height: 75px;
 }
 
-#teamNames {
+#buildDefinitionNames {
+    height: 300px;
 }
