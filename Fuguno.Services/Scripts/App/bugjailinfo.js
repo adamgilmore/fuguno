@@ -8,8 +8,6 @@ var BugJailInfoModel = Backbone.Model.extend({
 
 // Model View
 var BugJailInfoView = Backbone.View.extend({
-    template: _.template($("#bugJailInfoTemplate").html()),
-
     initialize: function () {
         _.bindAll(this, "render");
 
@@ -18,7 +16,8 @@ var BugJailInfoView = Backbone.View.extend({
 
     render: function () {
         var data = this.model.toJSON();
-        this.$el.html(this.template(data));
+        var compiled = _.template($("#bugJailInfoTemplate").html());
+        this.$el.html(compiled(data));
         return this;
     },
 });

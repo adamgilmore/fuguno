@@ -20,10 +20,30 @@ namespace Fuguno.Services
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
-            bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-                        "~/Scripts/modernizr-*"));
+            bundles.Add(new ScriptBundle("~/bundles/modernizr").Include("~/Scripts/modernizr-*"));
+
+            bundles.Add(new ScriptBundle("~/bundles/boardconfig").Include(
+                "~/Scripts/App/boardconfig.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/board").Include(
+                "~/Scripts/App/iterationinfo.js",
+                "~/Scripts/App/buildinfo.js",
+                "~/Scripts/App/helpers.js",
+                "~/Scripts/App/bugjailinfo.js",
+                "~/Scripts/App/workitemstats.js"));
+            bundles.Add(new ScriptBundle("~/bundles/flot").Include(
+                "~/Scripts/flot/jquery.flot.js",
+                "~/Scripts/flot/jquery.flot.stack.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/fx").Include(
+                "~/Scripts/underscore.js",
+                "~/Scripts/backbone.js",
+                "~/Scripts/moment.js",
+                "~/Scripts/sugar-full.development.js",
+                "~/Scripts/jquery.storageapi.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
+
             bundles.Add(new StyleBundle("~/Content/boardcss").Include("~/Content/Board.css"));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(

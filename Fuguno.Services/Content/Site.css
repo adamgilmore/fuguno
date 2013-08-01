@@ -754,3 +754,8 @@ tr.pager td {
             margin: 0;
         }
 }
+
+/* Board config */
+#buildDefinitionNames {
+    height: 300px;
+}

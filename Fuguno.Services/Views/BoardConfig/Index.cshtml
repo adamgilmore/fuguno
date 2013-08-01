@@ -1,6 +1,6 @@
 ﻿@{
-    Layout = "..\\Shared\\_BoardLayout.cshtml";
-    ViewBag.Title = "Index";
+    Layout = "..\\Shared\\_Layout.cshtml";
+    ViewBag.Title = "Config";
 }
 
 <script type="text/template" id="listItemTemplate">
@@ -8,46 +8,40 @@
 </script>
 
 <div id="body">
-    <h1>Board Config</h1>
-    <div>
-        <h2>Team</h2>
-        <select id="teamNames"></select>
-    </div>
-    <div>
-        <h2>Build Definitions</h2>
-        <select id="buildDefinitionNames" multiple></select>
-    </div>
-    <div>
-        <button id="save">Save</button>
-    </div>
-
-    <script src="~/Scripts/jquery-2.0.3.js"></script>
-    <script src="~/Scripts/underscore.js"></script>
-    <script src="~/Scripts/jquery.storageapi.js"></script>
-    <script src="~/Scripts/App/boardconfig.js"></script>
-
-    <script>
-        $(function () {
-            $("#save").click(function () {
-                storeSelectedListItems("#teamNames", LocalStorageKey_TeamNames);
-                storeSelectedListItems("#buildDefinitionNames", LocalStorageKey_BuildDefinitionNames);
-            });
-
-            $.ajax({
-                url: "api/boardconfig/teamnames"
-            }).done(function (list) {
-                bindListToTemplate(list, "#listItemTemplate", "#teamNames", LocalStorageKey_TeamNames);
-            });
-
-            $.ajax({
-                url: "api/boardconfig/builddefinitionnames"
-            }).done(function (list) {
-                bindListToTemplate(list, "#listItemTemplate", "#buildDefinitionNames", LocalStorageKey_BuildDefinitionNames);
-            });
-
-        })
-    </script>
+    <section class="content-wrapper">
+        <h3>Board Config</h3>
+        <div>
+            <h4>Team</h4>
+            <select id="teamNames"></select>
+        </div>
+        <div>
+            <h4>Build Definitions</h4>
+            <select id="buildDefinitionNames" multiple></select>
+        </div>
+        <div>
+            <button id="save">Save</button>
+        </div>
+    </section>
 </div>
+
+<script>
+    $("#save").click(function () {
+        storeSelectedListItems("#teamNames", LocalStorageKey_TeamNames);
+        storeSelectedListItems("#buildDefinitionNames", LocalStorageKey_BuildDefinitionNames);
+    });
+
+    $.ajax({
+        url: "api/boardconfig/teamnames"
+    }).done(function (list) {
+        bindListToTemplate(list, "#listItemTemplate", "#teamNames", LocalStorageKey_TeamNames);
+    });
+
+    $.ajax({
+        url: "api/boardconfig/builddefinitionnames"
+    }).done(function (list) {
+        bindListToTemplate(list, "#listItemTemplate", "#buildDefinitionNames", LocalStorageKey_BuildDefinitionNames);
+    });
+</script>
 
 
 

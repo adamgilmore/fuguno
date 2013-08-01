@@ -33,8 +33,6 @@ var BuildInfoList = Backbone.Collection.extend({
 
 // Item View
 var BuildInfoView = Backbone.View.extend({
-    template: _.template($("#buildInfoTemplate").html()),
-
     initialize: function () {
         _.bindAll(this, "render");
 
@@ -43,7 +41,8 @@ var BuildInfoView = Backbone.View.extend({
 
     render: function () {
         var data = this.model.toJSON();
-        this.$el.html(this.template(data));
+        var compiled = _.template($("#buildInfoTemplate").html());
+        this.$el.html(compiled(data));
         return this;
     },
 });

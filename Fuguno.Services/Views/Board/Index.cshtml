@@ -45,21 +45,6 @@
     </div>
 </script>
 
-<script src="~/Scripts/jquery-2.0.3.js"></script>
-<script src="~/Scripts/flot/jquery.flot.js"></script>
-<script src="~/Scripts/flot/jquery.flot.stack.js"></script>
-<script src="~/Scripts/underscore.js"></script>
-<script src="~/Scripts/backbone.js"></script>
-<script src="~/Scripts/moment.js"></script>
-<script src="~/Scripts/sugar-full.development.js"></script>
-<script src="~/Scripts/jquery.storageapi.js"></script>
-<script src="~/Scripts/App/helpers.js"></script>
-<script src="~/Scripts/App/buildinfo.js"></script>
-<script src="~/Scripts/App/iterationinfo.js"></script>
-<script src="~/Scripts/App/bugjailinfo.js"></script>
-<script src="~/Scripts/App/workitemstats.js"></script>
-<script src="~/Scripts/App/boardconfig.js"></script>
-
 <div id="body">
     <div id="wrap">
         <div id="header">
@@ -79,90 +64,90 @@
             <ul id="buildInfoList"></ul>
         </div>
     </div>
+ </div>
 
-    <script>
-        $(function() {
-            var iterationInfoView;
-            var bugJailInfoListView;
-            var buildInfoListView;
-            var bugsByPriorityView;
-            var activeBugsByAssignedToView;
-            var resolvedBugsByAssignedToView;
+<script>
+    $(function () {
+        var iterationInfoView;
+        var bugJailInfoListView;
+        var buildInfoListView;
+        var bugsByPriorityView;
+        var activeBugsByAssignedToView;
+        var resolvedBugsByAssignedToView;
 
-            if (isBoardConfigured() == false) {
-                alert("Need to set config");
-                return;
-            }
+        if (isBoardConfigured() == false) {
+            alert("Need to set config");
+            return;
+        }
 
-            teamNames = getBoardConfigSetting(LocalStorageKey_TeamNames).split(",");
-            buildDefinitionNames = getBoardConfigSetting(LocalStorageKey_BuildDefinitionNames).split(",");
+        teamNames = getBoardConfigSetting(LocalStorageKey_TeamNames).split(",");
+        buildDefinitionNames = getBoardConfigSetting(LocalStorageKey_BuildDefinitionNames).split(",");
 
-            loadPage();
+        loadPage();
 
-            function loadPage() {
-                iterationInfoView = new IterationInfoView({
-                    el: $("#iterationInfo"),
-                    model: new IterationInfoModel()
-                });
+        function loadPage() {
+            iterationInfoView = new IterationInfoView({
+                el: $("#iterationInfo"),
+                model: new IterationInfoModel()
+            });
 
-                bugJailInfoListView = new BugJailInfoListView({
-                    el: $("#bugJailInfoList"),
-                    TeamName: teamNames
-                });
+            bugJailInfoListView = new BugJailInfoListView({
+                el: $("#bugJailInfoList"),
+                TeamName: teamNames
+            });
 
-                buildInfoListView = new BuildInfoListView({ el: $("#buildInfoList") });
-                _.each(buildDefinitionNames, function (name) {
-                    buildInfoListView.addItem(name);
-                });
+            buildInfoListView = new BuildInfoListView({ el: $("#buildInfoList") });
+            _.each(buildDefinitionNames, function (name) {
+                buildInfoListView.addItem(name);
+            });
 
-                bugsByPriorityView = new WorkItemStatsView({
-                    templateId: "#workItemStatsTemplate_Narrow",
-                    el: $("#chart1"),
-                    model: new WorkItemStatsModel({
-                        TeamName: teamNames,
-                        Heading: "Active bugs by priority",
-                        Action: "priority",
-                        WorkItemType: "Bug",
-                        State: "Active"
-                    })
-                });
+            bugsByPriorityView = new WorkItemStatsView({
+                templateId: "#workItemStatsTemplate_Narrow",
+                el: $("#chart1"),
+                model: new WorkItemStatsModel({
+                    TeamName: teamNames,
+                    Heading: "Active bugs by priority",
+                    Action: "priority",
+                    WorkItemType: "Bug",
+                    State: "Active"
+                })
+            });
 
-                activeBugsByAssignedToView = new WorkItemStatsView({
-                    templateId: "#workItemStatsTemplate_Wide",
-                    el: $("#chart2"),
-                    model: new WorkItemStatsModel({
-                        TeamName: teamNames,
-                        Heading: "Active bugs by people",
-                        Action: "assignedto",
-                        WorkItemType: "Bug",
-                        State: "Active"
-                    })
-                });
+            activeBugsByAssignedToView = new WorkItemStatsView({
+                templateId: "#workItemStatsTemplate_Wide",
+                el: $("#chart2"),
+                model: new WorkItemStatsModel({
+                    TeamName: teamNames,
+                    Heading: "Active bugs by people",
+                    Action: "assignedto",
+                    WorkItemType: "Bug",
+                    State: "Active"
+                })
+            });
 
-                resolvedBugsByAssignedToView = new WorkItemStatsView({
-                    templateId: "#workItemStatsTemplate_Wide",
-                    el: $("#chart3"),
-                    model: new WorkItemStatsModel({
-                        TeamName: teamNames,
-                        Heading: "Resolved bugs by people",
-                        Action: "assignedto",
-                        WorkItemType: "Bug",
-                        State: "Resolved"
-                    })
-                });
+            resolvedBugsByAssignedToView = new WorkItemStatsView({
+                templateId: "#workItemStatsTemplate_Wide",
+                el: $("#chart3"),
+                model: new WorkItemStatsModel({
+                    TeamName: teamNames,
+                    Heading: "Resolved bugs by people",
+                    Action: "assignedto",
+                    WorkItemType: "Bug",
+                    State: "Resolved"
+                })
+            });
 
-                refreshPage();
-                window.setInterval(refreshPage, 60000);
-            }
+            refreshPage();
+            window.setInterval(refreshPage, 60000);
+        }
 
-            function refreshPage() {
-                iterationInfoView.model.fetch();
-                bugJailInfoListView.fetchCollection();
-                buildInfoListView.fetchModels();
-                bugsByPriorityView.model.fetch();
-                activeBugsByAssignedToView.model.fetch();
-                resolvedBugsByAssignedToView.model.fetch();
-            }
-        })
-    </script>
-</div>
+        function refreshPage() {
+            iterationInfoView.model.fetch();
+            bugJailInfoListView.fetchCollection();
+            buildInfoListView.fetchModels();
+            bugsByPriorityView.model.fetch();
+            activeBugsByAssignedToView.model.fetch();
+            resolvedBugsByAssignedToView.model.fetch();
+        }
+    })
+</script>
