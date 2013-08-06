@@ -756,6 +756,11 @@ tr.pager td {
 }
 
 /* Board config */
+#teamNames {
+    width: 50%;
+}
+
 #buildDefinitionNames {
     height: 300px;
+    width: 50%;
 }

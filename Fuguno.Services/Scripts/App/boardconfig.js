@@ -11,14 +11,19 @@ function getBoardConfigSetting(localStorageKey) {
 }
 
 function bindListToTemplate(list, templateSelector, el, localStorageKey) {
-    var selectedItems = getBoardConfigSetting(localStorageKey).split(",");
+    var selectedItems = getBoardConfigSetting(localStorageKey)
+    if (selectedItems != null)
+        selectedItems = selectedItems.split(",");
 
     _.each(list, function (item) {
         var compiled = _.template($(templateSelector).html());
-        var isSelected = $.inArray(item, selectedItems) > -1;
+        var isSelected = false;
+        if (selectedItems != null) {
+            isSelected = $.inArray(item, selectedItems) > -1;
+        }
+        
         var html = compiled({ name: item, selected: isSelected });
-        var element = $(el);
-        element.append(html);
+        $(el).append(html);
     });
 }
 

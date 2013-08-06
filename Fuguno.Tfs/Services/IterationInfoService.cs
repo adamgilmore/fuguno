@@ -45,7 +45,7 @@
                     GetIterationDates(rootIterationXmlNode, _tfsProjectName, ref iterationInfos);
                     if (iterationInfos != null)
                     {
-                        iterationInfo = iterationInfos.FirstOrDefault(n => DateTime.Now >= n.StartDate && DateTime.Now <= n.EndDate);
+                        iterationInfo = iterationInfos.FirstOrDefault(n => DateTime.Now.Date >= n.StartDate.Date && DateTime.Now.Date <= n.EndDate.Date);
                     }
                 }
                 return iterationInfo;

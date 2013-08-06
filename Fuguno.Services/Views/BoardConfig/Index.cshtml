@@ -12,35 +12,38 @@
         <h3>Board Config</h3>
         <div>
             <h4>Team</h4>
-            <select id="teamNames"></select>
+            <select id="teamNames" disabled></select>
         </div>
         <div>
             <h4>Build Definitions</h4>
-            <select id="buildDefinitionNames" multiple></select>
+            <select id="buildDefinitionNames" multiple disabled></select>
         </div>
         <div>
-            <button id="save">Save</button>
+            <button id="save" disabled>Save</button>
         </div>
     </section>
 </div>
 
 <script>
-    $("#save").click(function () {
-        storeSelectedListItems("#teamNames", LocalStorageKey_TeamNames);
-        storeSelectedListItems("#buildDefinitionNames", LocalStorageKey_BuildDefinitionNames);
-    });
+    $(function() {
+        $("#save").click(function () {
+            storeSelectedListItems("#teamNames", LocalStorageKey_TeamNames);
+            storeSelectedListItems("#buildDefinitionNames", LocalStorageKey_BuildDefinitionNames);
+            window.location.replace("board");
+        });
 
-    $.ajax({
-        url: "api/boardconfig/teamnames"
-    }).done(function (list) {
-        bindListToTemplate(list, "#listItemTemplate", "#teamNames", LocalStorageKey_TeamNames);
-    });
+        var teamNamesCall = $.ajax({ url: "api/boardconfig/teamnames" });
+        var buildDefinitionNamesCall = $.ajax({ url: "api/boardconfig/builddefinitionnames" });
 
-    $.ajax({
-        url: "api/boardconfig/builddefinitionnames"
-    }).done(function (list) {
-        bindListToTemplate(list, "#listItemTemplate", "#buildDefinitionNames", LocalStorageKey_BuildDefinitionNames);
-    });
+        $.when(teamNamesCall, buildDefinitionNamesCall)
+            .done(function (teamNamesResponse, buildDefinitionNamesResponse) {
+                bindListToTemplate(teamNamesResponse[0], "#listItemTemplate", "#teamNames", LocalStorageKey_TeamNames);
+                bindListToTemplate(buildDefinitionNamesResponse[0], "#listItemTemplate", "#buildDefinitionNames", LocalStorageKey_BuildDefinitionNames);
+                $("#teamNames").removeAttr("disabled");
+                $("#buildDefinitionNames").removeAttr("disabled");
+                $("#save").removeAttr("disabled");
+            });
+    })
 </script>
 
 

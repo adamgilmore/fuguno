@@ -51,30 +51,32 @@
             <div id="iterationInfo"></div>
         </div>
         <div id="main">
-            <div>
+            <div id="bugJailContainer">
                 <h3>Bug Jail - active bugs</h3>
                 <div id="bugJailInfoList"></div>
             </div>
-            <div id="chart1"></div>
-            <div id="chart2"></div>
-            <div id="chart3"></div>
+            <div id="activeBugsContainer"></div>
+            <div id="activeBugsByPeopleContainer"></div>
+            <div id="resolvedBugsByPeopleContainer"></div>
         </div>
         <div id="sidebar">
-            <h3>Builds</h3>
-            <ul id="buildInfoList"></ul>
+            <div>
+                <h3>Builds</h3>
+                <ul id="buildInfoList"></ul>
+            </div>
         </div>
     </div>
  </div>
 
 <script>
-    $(function () {
-        var iterationInfoView;
-        var bugJailInfoListView;
-        var buildInfoListView;
-        var bugsByPriorityView;
-        var activeBugsByAssignedToView;
-        var resolvedBugsByAssignedToView;
+    var iterationInfoView;
+    var bugJailInfoListView;
+    var buildInfoListView;
+    var bugsByPriorityView;
+    var activeBugsByAssignedToView;
+    var resolvedBugsByAssignedToView;
 
+    $(function() {
         if (isBoardConfigured() == false) {
             alert("Need to set config");
             return;
@@ -85,69 +87,71 @@
 
         loadPage();
 
-        function loadPage() {
-            iterationInfoView = new IterationInfoView({
-                el: $("#iterationInfo"),
-                model: new IterationInfoModel()
-            });
-
-            bugJailInfoListView = new BugJailInfoListView({
-                el: $("#bugJailInfoList"),
-                TeamName: teamNames
-            });
-
-            buildInfoListView = new BuildInfoListView({ el: $("#buildInfoList") });
-            _.each(buildDefinitionNames, function (name) {
-                buildInfoListView.addItem(name);
-            });
-
-            bugsByPriorityView = new WorkItemStatsView({
-                templateId: "#workItemStatsTemplate_Narrow",
-                el: $("#chart1"),
-                model: new WorkItemStatsModel({
-                    TeamName: teamNames,
-                    Heading: "Active bugs by priority",
-                    Action: "priority",
-                    WorkItemType: "Bug",
-                    State: "Active"
-                })
-            });
-
-            activeBugsByAssignedToView = new WorkItemStatsView({
-                templateId: "#workItemStatsTemplate_Wide",
-                el: $("#chart2"),
-                model: new WorkItemStatsModel({
-                    TeamName: teamNames,
-                    Heading: "Active bugs by people",
-                    Action: "assignedto",
-                    WorkItemType: "Bug",
-                    State: "Active"
-                })
-            });
-
-            resolvedBugsByAssignedToView = new WorkItemStatsView({
-                templateId: "#workItemStatsTemplate_Wide",
-                el: $("#chart3"),
-                model: new WorkItemStatsModel({
-                    TeamName: teamNames,
-                    Heading: "Resolved bugs by people",
-                    Action: "assignedto",
-                    WorkItemType: "Bug",
-                    State: "Resolved"
-                })
-            });
-
-            refreshPage();
-            window.setInterval(refreshPage, 60000);
-        }
-
-        function refreshPage() {
-            iterationInfoView.model.fetch();
-            bugJailInfoListView.fetchCollection();
-            buildInfoListView.fetchModels();
-            bugsByPriorityView.model.fetch();
-            activeBugsByAssignedToView.model.fetch();
-            resolvedBugsByAssignedToView.model.fetch();
-        }
     })
+
+    function loadPage() {
+        iterationInfoView = new IterationInfoView({
+            el: $("#iterationInfo"),
+            model: new IterationInfoModel()
+        });
+
+        bugJailInfoListView = new BugJailInfoListView({
+            el: $("#bugJailInfoList"),
+            TeamName: teamNames
+        });
+
+        buildInfoListView = new BuildInfoListView({ el: $("#buildInfoList") });
+        _.each(buildDefinitionNames, function (name) {
+            buildInfoListView.addItem(name);
+        });
+
+        bugsByPriorityView = new WorkItemStatsView({
+            templateId: "#workItemStatsTemplate_Narrow",
+            el: $("#activeBugsContainer"),
+            model: new WorkItemStatsModel({
+                TeamName: teamNames,
+                Heading: "Active bugs by priority",
+                Action: "priority",
+                WorkItemType: "Bug",
+                State: "Active"
+            })
+        });
+
+        activeBugsByAssignedToView = new WorkItemStatsView({
+            templateId: "#workItemStatsTemplate_Wide",
+            el: $("#activeBugsByPeopleContainer"),
+            model: new WorkItemStatsModel({
+                TeamName: teamNames,
+                Heading: "Active bugs by people",
+                Action: "assignedto",
+                WorkItemType: "Bug",
+                State: "Active"
+            })
+        });
+
+        resolvedBugsByAssignedToView = new WorkItemStatsView({
+            templateId: "#workItemStatsTemplate_Wide",
+            el: $("#resolvedBugsByPeopleContainer"),
+            model: new WorkItemStatsModel({
+                TeamName: teamNames,
+                Heading: "Resolved bugs by people",
+                Action: "assignedto",
+                WorkItemType: "Bug",
+                State: "Resolved"
+            })
+        });
+
+        refreshPage();
+        window.setInterval(refreshPage, 60000);
+    }
+
+    function refreshPage() {
+        iterationInfoView.model.fetch();
+        bugJailInfoListView.fetchCollection();
+        buildInfoListView.fetchModels();
+        bugsByPriorityView.model.fetch();
+        activeBugsByAssignedToView.model.fetch();
+        resolvedBugsByAssignedToView.model.fetch();
+    }
+
 </script>
